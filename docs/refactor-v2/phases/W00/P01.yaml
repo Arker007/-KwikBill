@@ -1,0 +1,38 @@
+id: "W00-P01"
+title: "Baseline verification, test suite freeze, and data snapshot manifest"
+status: "completed"
+depends_on: []
+objective: "Verify all existing test suites, freeze baseline behavior, and record a pre-refactor backup snapshot."
+scope: "Execution of statutory tax tests, discount tests, smoke suite, and generation of baseline verification manifest."
+files_read:
+  - "scripts/tax-test.mjs"
+  - "scripts/discount-modes-test.mjs"
+  - "tests/smoke.mjs"
+  - "scripts/validate-json-data.mjs"
+files_create:
+  - "docs/refactor-v2/BASELINE_MANIFEST.json"
+actions:
+  - "Execute node scripts/tax-test.mjs and record baseline output (must be 70/70 passing)."
+  - "Execute node scripts/discount-modes-test.mjs and record baseline output (must be 9/9 passing)."
+  - "Execute node tests/smoke.mjs and verify all 23 native HTTP subtests pass."
+  - "Execute node scripts/validate-json-data.mjs --snapshot to capture a full data directory safety snapshot under data/backups/."
+  - "Write verification hashes and test counts to docs/refactor-v2/BASELINE_MANIFEST.json."
+preserve:
+  - "Do not alter any existing test files, statutory tax algorithms, or data records."
+acceptance:
+  - "All 70 tax tests pass with 0 errors."
+  - "All 9 discount modes tests pass with 0 errors."
+  - "All 23 smoke tests pass with 0 errors."
+  - "A complete data backup snapshot is created in data/backups/."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "If data was touched, restore from data/backups/ latest snapshot."
+risks:
+  - "Stale data or lock contention on accounting.db during snapshot."
+context_refs:
+  - "AGENTS.md"
+  - "RULES.md"
+  - "docs/refactor-v2/INVENTORY.md"

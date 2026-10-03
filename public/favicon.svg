@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="kwik-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1665D8"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#kwik-grad)"/>
+  <!-- Stylized K with lightning spark line -->
+  <path d="M20 14h6v36h-6z" fill="#FFFFFF"/>
+  <path d="M26 32l16-18h7L33 30l17 20h-7.5L26 32z" fill="#FFFFFF"/>
+  <path d="M42 12l-8 10h6l-6 10 12-12h-6l8-8z" fill="#FBBF24"/>
+</svg>

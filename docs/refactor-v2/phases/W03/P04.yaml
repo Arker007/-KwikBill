@@ -1,0 +1,39 @@
+id: "W03-P04"
+title: "Catalog & Inventory backend modules"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Migrate product master data and inventory stock tracking into apps/api/src/modules/catalog and inventory."
+scope: "Backend products controller, service, repository, and low-stock threshold alert services."
+files_read:
+  - "server/modules/products/products.controller.js"
+  - "server/modules/products/products.service.js"
+  - "server/modules/products/products.repository.js"
+  - "server/modules/products/products.routes.js"
+files_create:
+  - "apps/api/src/modules/catalog/catalog.controller.ts"
+  - "apps/api/src/modules/catalog/catalog.service.ts"
+  - "apps/api/src/modules/catalog/catalog.repository.ts"
+  - "apps/api/src/modules/catalog/catalog.routes.ts"
+  - "apps/api/src/modules/catalog/index.ts"
+  - "apps/api/src/modules/inventory/inventory.service.ts"
+  - "apps/api/src/modules/inventory/index.ts"
+actions:
+  - "Port products repository to catalog.repository.ts using SqliteCollectionRepository('products')."
+  - "Port inventory valuation and stock threshold checks into inventory.service.ts."
+  - "Expose GET /api/products, POST /api/products, and DELETE /api/products in catalog.routes.ts."
+  - "Maintain re-exports in server/modules/products/ for legacy callers."
+preserve:
+  - "Preserve HSN/SAC code mapping, default tax rate assignment, and stock level decrement rules."
+acceptance:
+  - "GET /api/products returns 200 with product list."
+  - "Product CRUD operations succeed and stock movements update accurately."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert catalog re-exports in server/modules/products/."
+risks:
+  - "Stock count integer underflow if negative quantities are not clamped."
+context_refs:
+  - "server/modules/products/products.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

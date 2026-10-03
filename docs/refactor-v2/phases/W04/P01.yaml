@@ -1,0 +1,44 @@
+id: "W04-P01"
+title: "Frontend app shell, platform, and router structure"
+status: "pending"
+depends_on:
+  - "W01-P03"
+  - "W02-P02"
+objective: "Establish apps/web/src/app and platform architecture with AppShell, router, and context providers."
+scope: "Setting up apps/web application shell, theme providers, navigation, and top-level routing."
+files_read:
+  - "src/app/App.tsx"
+  - "src/app/layout/AppShell.tsx"
+  - "src/app/providers/AppProviders.tsx"
+  - "src/app/router/useAppRouter.ts"
+files_create:
+  - "apps/web/src/main.tsx"
+  - "apps/web/src/index.css"
+  - "apps/web/src/app/App.tsx"
+  - "apps/web/src/platform/layout/AppShell.tsx"
+  - "apps/web/src/platform/layout/Sidebar.tsx"
+  - "apps/web/src/platform/layout/Header.tsx"
+  - "apps/web/src/platform/providers/AppProviders.tsx"
+  - "apps/web/src/platform/router/useAppRouter.ts"
+actions:
+  - "Set up apps/web/src/main.tsx and index.css importing Tailwind presets."
+  - "Port AppShell, Sidebar, and Header into apps/web/src/platform/layout/."
+  - "Port AppProviders (Theme, Toast, Profile) into apps/web/src/platform/providers/."
+  - "Port useAppRouter into apps/web/src/platform/router/."
+  - "Keep src/app/ delegating to apps/web/src/app/App.tsx for backwards compatibility during migration."
+preserve:
+  - "Preserve Lucide icon navigation, Dark/Light theme switching, and responsive mobile drawer."
+acceptance:
+  - "Vite compiles apps/web/src/main.tsx without errors."
+  - "App boots with full shell navigation in browser."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert root src/ App delegation and clean apps/web/src/platform/."
+risks:
+  - "Loss of active route state during navigation transition."
+context_refs:
+  - "src/app/App.tsx"
+  - "src/app/layout/AppShell.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

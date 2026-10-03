@@ -1,0 +1,37 @@
+id: "W01-P01"
+title: "Monorepo workspace configuration & base TypeScript setup"
+status: "completed"
+depends_on:
+  - "W00-P01"
+objective: "Configure monorepo workspace structure in root package.json and establish base TypeScript compiler options."
+scope: "Root package.json workspace declaration, tsconfig.base.json creation, and directory skeleton."
+files_read:
+  - "package.json"
+  - "tsconfig.json"
+files_change:
+  - "package.json"
+files_create:
+  - "tsconfig.base.json"
+  - "apps/web/package.json"
+  - "apps/api/package.json"
+actions:
+  - "Add workspaces field to root package.json: ['apps/*', 'packages/*']."
+  - "Create tsconfig.base.json with shared strict TypeScript compiler options, ES2022 target, and NodeNext/Bundler module resolution."
+  - "Initialize apps/web/package.json with name '@free-gst/web' and apps/api/package.json with name '@free-gst/api'."
+  - "Ensure root scripts continue delegating to node server.js and vite build during the transition."
+preserve:
+  - "Preserve all existing dependencies and top-level npm scripts in package.json."
+acceptance:
+  - "npm install or workspace link evaluates without errors."
+  - "Root npm run build continues to compile without regressions."
+verify:
+  - "npm run build"
+  - "node scripts/tax-test.mjs"
+rollback:
+  - "Revert package.json to remove workspaces field; delete tsconfig.base.json and apps/ package.json files."
+risks:
+  - "Dependency hoisting issues across workspaces."
+context_refs:
+  - "package.json"
+  - "tsconfig.json"
+  - "docs/refactor-v2/ARCHITECTURE.md"

@@ -1,0 +1,437 @@
+version: "2.0.0"
+description: "Mapping of existing Free GST Billing Software files to target monorepo architecture"
+
+mappings:
+  # ----------------------------------------------------------------------------
+  # ROOT & CONFIGURATION
+  # ----------------------------------------------------------------------------
+  - source: "package.json"
+    target: "package.json"
+    action: "split"
+    phase: "W01-P01"
+    dependencies: []
+    notes: "Define monorepo workspaces: apps/*, packages/*"
+
+  - source: "tsconfig.json"
+    target: "tsconfig.base.json"
+    action: "split"
+    phase: "W01-P01"
+    dependencies: ["W01-P01"]
+    notes: "Base TS config extended by apps and packages"
+
+  - source: "vite.config.js"
+    target: "apps/web/vite.config.ts"
+    action: "move"
+    phase: "W01-P03"
+    dependencies: ["W01-P01"]
+    notes: "Configure Vite for apps/web with @ alias to apps/web/src"
+
+  - source: "server.js"
+    target: "apps/api/src/bootstrap/server.ts"
+    action: "move"
+    phase: "W03-P01"
+    dependencies: ["W01-P01"]
+    notes: "Main HTTP listener binding 0.0.0.0:3000"
+
+  - source: "server/index.js"
+    target: "apps/api/src/bootstrap/index.ts"
+    action: "move"
+    phase: "W03-P01"
+    dependencies: ["W01-P01"]
+    notes: "Process lifecycle, signal handlers, error logger"
+
+  - source: "server/app.js"
+    target: "apps/api/src/bootstrap/app.ts"
+    action: "move"
+    phase: "W03-P01"
+    dependencies: ["W01-P01"]
+    notes: "Express app configuration, middleware pipeline and router mounting"
+
+  # ----------------------------------------------------------------------------
+  # PACKAGES / FINANCIAL-CORE (Statutory Math Quarantine)
+  # ----------------------------------------------------------------------------
+  - source: "src/features/invoices/utils/taxCalculation.ts"
+    target: "packages/financial-core/src/tax/taxCalculation.ts"
+    action: "move"
+    phase: "W05-P01"
+    dependencies: ["W02-P01"]
+    notes: "Statutory GST calculation formulas (Rule 1 Non-negotiable)"
+
+  - source: "src/features/income-tax/utils/itrCalculation.ts"
+    target: "packages/financial-core/src/income-tax/itrCalculation.ts"
+    action: "move"
+    phase: "W05-P02"
+    dependencies: ["W02-P01"]
+    notes: "Budget 2025 income tax, 87A rebate, capital gains and 234A/B/C math"
+
+  - source: "src/shared/constants/indianStates.ts"
+    target: "packages/financial-core/src/constants/indianStates.ts"
+    action: "move"
+    phase: "W05-P01"
+    dependencies: ["W02-P01"]
+    notes: "GST state codes and union territory mappings"
+
+  - source: "src/shared/constants/taxRates.ts"
+    target: "packages/financial-core/src/constants/taxRates.ts"
+    action: "move"
+    phase: "W05-P01"
+    dependencies: ["W02-P01"]
+    notes: "Standard GST rates, TDS and TCS statutory thresholds"
+
+  - source: "src/shared/utils/formatters.ts"
+    target: "packages/financial-core/src/formatters/currencyFormatters.ts"
+    action: "move"
+    phase: "W05-P01"
+    dependencies: ["W02-P01"]
+    notes: "numberToWords (Lakhs/Crores) and multi-currency formatters"
+
+  - source: "src/shared/utils/validators.ts"
+    target: "packages/financial-core/src/validators/gstinValidators.ts"
+    action: "move"
+    phase: "W05-P01"
+    dependencies: ["W02-P01"]
+    notes: "Statutory Modulo-36 GSTIN checksum and PAN validation"
+
+  # ----------------------------------------------------------------------------
+  # PACKAGES / API-CONTRACTS & CLIENT
+  # ----------------------------------------------------------------------------
+  - source: "src/shared/types/*"
+    target: "packages/api-contracts/src/common/*"
+    action: "move"
+    phase: "W02-P01"
+    dependencies: ["W01-P01"]
+    notes: "Universal shared types for currency, tax, address, pagination"
+
+  - source: "src/features/invoices/types/*"
+    target: "packages/api-contracts/src/invoicing/*"
+    action: "move"
+    phase: "W02-P01"
+    dependencies: ["W01-P01"]
+    notes: "Invoice, item, discount, and print contract definitions"
+
+  - source: "src/services/api/client.ts"
+    target: "packages/api-client/src/client.ts"
+    action: "move"
+    phase: "W02-P03"
+    dependencies: ["W02-P01"]
+    notes: "Typed HTTP client wrapper with abort signal and error handling"
+
+  - source: "src/services/api/endpoints.ts"
+    target: "packages/api-client/src/endpoints.ts"
+    action: "move"
+    phase: "W02-P03"
+    dependencies: ["W02-P01"]
+    notes: "Centralized route dictionary for all API endpoints"
+
+  # ----------------------------------------------------------------------------
+  # PACKAGES / UI & DOCUMENT-RENDERER
+  # ----------------------------------------------------------------------------
+  - source: "src/shared/components/ui/*"
+    target: "packages/ui/src/primitives/*"
+    action: "move"
+    phase: "W02-P02"
+    dependencies: ["W01-P01"]
+    notes: "Buttons, Inputs, Cards, Tables, Badges, Modals"
+
+  - source: "src/shared/components/feedback/*"
+    target: "packages/ui/src/feedback/*"
+    action: "move"
+    phase: "W02-P02"
+    dependencies: ["W01-P01"]
+    notes: "Toast, ConfirmModal, AlertBanner"
+
+  - source: "src/styles/*"
+    target: "packages/ui/src/styles/*"
+    action: "move"
+    phase: "W02-P02"
+    dependencies: ["W01-P01"]
+    notes: "Design tokens, themes, reset, utilities and print CSS"
+
+  - source: "src/features/invoices/services/pdfService.ts"
+    target: "packages/document-renderer/src/pdfService.ts"
+    action: "move"
+    phase: "W04-P11"
+    dependencies: ["W02-P02"]
+    notes: "html2canvas and jsPDF invoice renderer"
+
+  - source: "src/features/invoices/components/InvoicePreview/*"
+    target: "packages/document-renderer/src/templates/*"
+    action: "move"
+    phase: "W04-P11"
+    dependencies: ["W02-P02"]
+    notes: "Thermal receipt and standard sheet invoice templates"
+
+  # ----------------------------------------------------------------------------
+  # BACKEND MODULES (apps/api/src/modules/)
+  # ----------------------------------------------------------------------------
+  - source: "server/modules/profiles/*"
+    target: "apps/api/src/modules/organization/*"
+    action: "move"
+    phase: "W03-P02"
+    dependencies: ["W03-P01"]
+    notes: "Business profile management"
+
+  - source: "server/modules/clients/*"
+    target: "apps/api/src/modules/customers/*"
+    action: "move"
+    phase: "W03-P03"
+    dependencies: ["W03-P01"]
+    notes: "Customer ledger and master records"
+
+  - source: "server/modules/products/*"
+    target: "apps/api/src/modules/catalog/*"
+    action: "move"
+    phase: "W03-P04"
+    dependencies: ["W03-P01"]
+    notes: "Catalog and inventory tracking"
+
+  - source: "server/modules/bills/*"
+    target: "apps/api/src/modules/invoicing/*"
+    action: "move"
+    phase: "W03-P05"
+    dependencies: ["W03-P01"]
+    notes: "Bills and invoices 4-layer lifecycle"
+
+  - source: "server/modules/meta/*"
+    target: "apps/api/src/modules/invoicing/counters/*"
+    action: "split"
+    phase: "W03-P05"
+    dependencies: ["W03-P01"]
+    notes: "Atomic sequence numbering and numbering settings"
+
+  - source: "server/modules/recurring/*"
+    target: "apps/api/src/modules/recurring-billing/*"
+    action: "move"
+    phase: "W03-P06"
+    dependencies: ["W03-P01"]
+    notes: "Automated recurring billing rules"
+
+  - source: "server/modules/purchases/*"
+    target: "apps/api/src/modules/purchasing/*"
+    action: "move"
+    phase: "W03-P07"
+    dependencies: ["W03-P01"]
+    notes: "Vendor purchase bills"
+
+  - source: "server/modules/expenses/*"
+    target: "apps/api/src/modules/expenses/*"
+    action: "move"
+    phase: "W03-P07"
+    dependencies: ["W03-P01"]
+    notes: "Expense records and statutory ITC categorization"
+
+  - source: "server/modules/receipts/*"
+    target: "apps/api/src/modules/payments/*"
+    action: "move"
+    phase: "W03-P08"
+    dependencies: ["W03-P01"]
+    notes: "Payment receipts and invoice allocations"
+
+  - source: "server/modules/templates/*"
+    target: "apps/api/src/modules/documents/*"
+    action: "move"
+    phase: "W03-P10"
+    dependencies: ["W03-P01"]
+    notes: "Custom terms and print template presets"
+
+  - source: "server/modules/supabase/*"
+    target: "apps/api/src/infrastructure/cloud-sync/supabase/*"
+    action: "move"
+    phase: "W07-P03"
+    status: "COMPLETED"
+    dependencies: ["W03-P01"]
+    notes: "Cloud backup and sync engine"
+
+  - source: "server/infrastructure/storage/*"
+    target: "apps/api/src/infrastructure/persistence/*"
+    action: "move"
+    phase: "W06-P02"
+    status: "COMPLETED"
+    dependencies: ["W03-P01"]
+    notes: "SqliteCollectionRepository, JsonCollectionRepository, SingleFileRepository"
+
+  - source: "server/infrastructure/cron/*"
+    target: "apps/api/src/infrastructure/scheduler/*"
+    action: "move"
+    phase: "W07-P01"
+    status: "COMPLETED"
+    dependencies: ["W03-P06"]
+    notes: "recurringEngine, trashEngine, cron loop timers"
+
+  - source: "server/infrastructure/backup/*"
+    target: "apps/api/src/infrastructure/backups/*"
+    action: "move"
+    phase: "W07-P02"
+    status: "COMPLETED"
+    dependencies: ["W03-P01", "W06-P02"]
+    notes: "backupEngine, snapshotManager, backupsRouter"
+
+  - source: "tests/*"
+    target: "tests/{e2e,contract,security,migration}/*"
+    action: "move"
+    phase: "W08-P01"
+    status: "COMPLETED"
+    dependencies: ["W03-P10", "W04-P12"]
+    notes: "Consolidated test harness suites"
+
+  # ----------------------------------------------------------------------------
+  # FRONTEND DOMAINS (apps/web/src/domains/)
+  # ----------------------------------------------------------------------------
+  - source: "src/features/clients/*"
+    target: "apps/web/src/domains/customers/*"
+    action: "move"
+    phase: "W04-P03"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Client list, modal, ledger generator, and aging analysis"
+
+  - source: "src/features/inventory/*"
+    target: "apps/web/src/domains/catalog/*"
+    action: "split"
+    phase: "W04-P04"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Product modal, category manager, inventory tables"
+
+  - source: "src/features/invoices/*"
+    target: "apps/web/src/domains/invoicing/*"
+    action: "move"
+    phase: "W04-P05"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "InvoiceEditor, BillsRegisterTable, MetricCards, BillOCR"
+
+  - source: "src/features/recurring/*"
+    target: "apps/web/src/domains/recurring-billing/*"
+    action: "move"
+    phase: "W04-P06"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Recurring modal and scheduling views"
+
+  - source: "src/features/purchases/*"
+    target: "apps/web/src/domains/purchasing/*"
+    action: "move"
+    phase: "W04-P07"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Purchase bills and vendor management"
+
+  - source: "src/features/expenses/*"
+    target: "apps/web/src/domains/expenses/*"
+    action: "move"
+    phase: "W04-P07"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Expense modal and ITC routing"
+
+  - source: "src/features/receipts/*"
+    target: "apps/web/src/domains/payments/*"
+    action: "move"
+    phase: "W04-P08"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Receipts list, modal, and payment voucher"
+
+  - source: "src/features/gst-returns/*"
+    target: "apps/web/src/domains/taxation/gst/*"
+    action: "move"
+    phase: "W04-P09"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W05-P01"]
+    notes: "GSTR-1, GSTR-3B, GSTR-2B, TDS/TCS tabs"
+
+  - source: "src/features/income-tax/*"
+    target: "apps/web/src/domains/taxation/income-tax/*"
+    action: "move"
+    phase: "W04-P09"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W05-P02"]
+    notes: "Old/New regime calculator, Presumptive, Advance tax, Bank import"
+
+  - source: "src/features/reports/*"
+    target: "apps/web/src/domains/reporting/*"
+    action: "move"
+    phase: "W04-P10"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Sales reports, P&L, aging analysis, client analytics"
+
+  - source: "src/features/invoices/services/pdfService.ts"
+    target: "packages/document-renderer/*"
+    action: "move"
+    phase: "W04-P11"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W04-P05"]
+    notes: "Extract packages/document-renderer and migrate templates into documents domain"
+
+  - source: "src/features/settings/*"
+    target: "apps/web/src/domains/organization/*"
+    action: "split"
+    phase: "W04-P02"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Split settings views into organization, identity, documents, integrations"
+
+  - source: "src/features/supabase/*"
+    target: "apps/web/src/domains/integrations/supabase/*"
+    action: "move"
+    phase: "W04-P12"
+    status: "COMPLETED"
+    dependencies: ["W04-P01", "W02-P02"]
+    notes: "Supabase cloud sync hub"
+
+  # ----------------------------------------------------------------------------
+  # DATABASE & PERSISTENCE (database/ & data/)
+  # ----------------------------------------------------------------------------
+  - source: "server/infrastructure/db/schema.sql"
+    target: "database/schema/schema.sql"
+    action: "move"
+    phase: "W06-P01"
+    status: "COMPLETED"
+    dependencies: []
+    notes: "Canonical normalized SQLite DDL (15 tables, 12 indexes)"
+
+  - source: "data/accounting.db"
+    target: "data/sqlite/accounting.db"
+    action: "move"
+    phase: "W06-P04"
+    dependencies: ["W06-P01", "W06-P02"]
+    notes: "Active SQLite WAL database file"
+
+  - source: "data/bills/*"
+    target: "data/legacy-json/bills/*"
+    action: "move"
+    phase: "W09-P02"
+    dependencies: ["W06-P04"]
+    notes: "Archived JSON files retained for zero-risk rollback"
+
+  # ----------------------------------------------------------------------------
+  # TESTS & VERIFICATION
+  # ----------------------------------------------------------------------------
+  - source: "scripts/tax-test.mjs"
+    target: "packages/financial-core/tests/tax.test.mjs"
+    action: "move"
+    phase: "W08-P01"
+    dependencies: ["W05-P01"]
+    notes: "Mandatory 70/70 statutory GST regression suite"
+
+  - source: "scripts/discount-modes-test.mjs"
+    target: "packages/financial-core/tests/discount.test.mjs"
+    action: "move"
+    phase: "W08-P01"
+    dependencies: ["W05-P01"]
+    notes: "Mandatory 9/9 discount calculation modes regression suite"
+
+  - source: "tests/smoke.mjs"
+    target: "tests/e2e/smoke.test.mjs"
+    action: "move"
+    phase: "W08-P01"
+    dependencies: ["W03-P01", "W01-P03"]
+    notes: "Native Node.js HTTP 23/23 smoke suite"
+
+  - source: "scripts/verify-migration-parity.mjs"
+    target: "tests/migration/parity.test.mjs"
+    action: "move"
+    phase: "W08-P01"
+    dependencies: ["W06-P04"]
+    notes: "JSON vs SQLite parity verification harness"

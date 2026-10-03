@@ -1,0 +1,33 @@
+id: "W06-P03"
+title: "SingleFileRepository & Meta counters reconciliation (Dual-write & SQLite parity)"
+status: "completed"
+depends_on:
+  - "W06-P02"
+objective: "Bridge SingleFileRepository and Meta counters to maintain dual-write parity between data/meta.json and SQLite tables."
+scope: "Updating meta.repository.js and SingleFileRepository to synchronize app settings and sequence counters to SQLite."
+files_read:
+  - "server/modules/meta/meta.repository.js"
+  - "server/infrastructure/storage/SingleFileRepository.js"
+  - "scripts/verify-migration-parity.mjs"
+files_change:
+  - "apps/api/src/modules/invoicing/counters/counters.repository.ts"
+  - "apps/api/src/infrastructure/persistence/SingleFileRepository.ts"
+actions:
+  - "Update meta counter increment logic to write atomically to SQLite meta_counters table as well as data/meta.json."
+  - "Update app settings read/write to synchronize SQLite app_settings table with JSON meta."
+  - "Ensure scripts/verify-migration-parity.mjs checks pass for test_smoke_counter and sequence counters."
+preserve:
+  - "Preserve data/meta.json file format and atomic write semantics via atomicFs."
+acceptance:
+  - "Meta increment operations update both JSON file and SQLite tables with 100% value parity."
+  - "Discrepancy in test_smoke_counter parity is resolved."
+verify:
+  - "node scripts/verify-migration-parity.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert SingleFileRepository updates to write solely to JSON."
+risks:
+  - "Race conditions during concurrent counter increments across multiple clients."
+context_refs:
+  - "server/modules/meta/meta.repository.js"
+  - "docs/refactor-v2/INVENTORY.md"

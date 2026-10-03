@@ -1,0 +1,37 @@
+id: "W04-P08"
+title: "Payments frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P05"
+objective: "Migrate receipts, payment vouchers, and multi-bill allocations into apps/web/src/domains/payments."
+scope: "Frontend payments domain components, receipt modals, payment accounts, and invoice allocation table."
+files_read:
+  - "src/pages/ReceiptsPage.tsx"
+  - "src/features/receipts/components/ReceiptModal.tsx"
+  - "src/features/receipts/components/ReceiptsTable.tsx"
+  - "src/features/receipts/hooks/useReceipts.ts"
+files_create:
+  - "apps/web/src/domains/payments/pages/PaymentsPage.tsx"
+  - "apps/web/src/domains/payments/components/PaymentReceiptModal.tsx"
+  - "apps/web/src/domains/payments/components/PaymentsTable.tsx"
+  - "apps/web/src/domains/payments/components/BillAllocationTable.tsx"
+  - "apps/web/src/domains/payments/hooks/usePayments.ts"
+  - "apps/web/src/domains/payments/index.ts"
+actions:
+  - "Port ReceiptsPage, ReceiptModal, and ReceiptsTable into apps/web/src/domains/payments/."
+  - "Wire usePayments hook to @free-gst/api-client payment endpoints."
+  - "Maintain re-exports in src/features/receipts/ and src/pages/ReceiptsPage.tsx."
+preserve:
+  - "Preserve payment mode selection and dynamic allocation balance calculations across unpaid bills."
+acceptance:
+  - "Payments page renders, records receipts, and updates bill statuses."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/receipts/ original files."
+risks:
+  - "Client unpaid balance calculation divergence during allocation."
+context_refs:
+  - "src/pages/ReceiptsPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

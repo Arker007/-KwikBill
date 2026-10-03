@@ -1,0 +1,43 @@
+id: "W03-P01"
+title: "Backend app bootstrap and middleware infrastructure"
+status: "completed"
+depends_on:
+  - "W01-P03"
+  - "W02-P01"
+objective: "Establish apps/api bootstrap architecture, configuration loader, and middleware pipeline."
+scope: "Creation of apps/api/src/bootstrap, apps/api/src/config, and apps/api/src/platform/middleware."
+files_read:
+  - "server.js"
+  - "server/app.js"
+  - "server/index.js"
+  - "server/config/env.js"
+  - "server/config/paths.js"
+files_create:
+  - "apps/api/src/bootstrap/server.ts"
+  - "apps/api/src/bootstrap/index.ts"
+  - "apps/api/src/bootstrap/app.ts"
+  - "apps/api/src/config/env.ts"
+  - "apps/api/src/config/paths.ts"
+  - "apps/api/src/platform/middleware/errorHandler.ts"
+  - "apps/api/src/platform/middleware/pathSanitizer.ts"
+actions:
+  - "Port server.js and server/index.js lifecycle management to apps/api/src/bootstrap/server.ts and index.ts."
+  - "Port server/app.js Express configuration and middleware stack into apps/api/src/bootstrap/app.ts."
+  - "Port server/config/env.js and paths.js into apps/api/src/config/."
+  - "Port error handling and path traversal sanitization middleware into apps/api/src/platform/middleware/."
+  - "Ensure server.js continues to act as entry point delegating to apps/api bootstrap."
+preserve:
+  - "Preserve 0.0.0.0:3000 host/port binding and CORS/security headers."
+acceptance:
+  - "Server boots successfully via both server.js and apps/api/src/bootstrap/server.ts."
+  - "GET /api/health responds with 200 { ok: true }."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert server.js delegation and remove apps/api/src/bootstrap/ files."
+risks:
+  - "Port binding collision or missing environment variables."
+context_refs:
+  - "server.js"
+  - "server/app.js"
+  - "RULES.md"

@@ -1,0 +1,367 @@
+/**
+ * Ant Design (AntD v5) Design Tokens — Free GST Billing Software
+ * Three-tier token architecture: Seed Tokens, Map Tokens, and Component Tokens.
+ * Includes complete 10-step color palettes, typography, motion, elevation, and 4px grid sizing.
+ */
+
+:root {
+  /* ================================================================
+     1. Seed Tokens (Ant Design System Seeds)
+     ================================================================ */
+  --ant-color-primary-seed: #1677ff;
+  --ant-color-success-seed: #52c41a;
+  --ant-color-warning-seed: #faad14;
+  --ant-color-error-seed:   #ff4d4f;
+  --ant-color-info-seed:    #1677ff;
+  --ant-color-text-base:    #000000;
+  --ant-color-bg-base:      #ffffff;
+
+  /* ================================================================
+     2. Ant Design Color Palettes (10-Step Derivative Scales)
+     ================================================================ */
+  /* Blue / Primary / Info */
+  --ant-blue-1:  #e6f4ff;
+  --ant-blue-2:  #bae0ff;
+  --ant-blue-3:  #91caff;
+  --ant-blue-4:  #69b1ff;
+  --ant-blue-5:  #4096ff;
+  --ant-blue-6:  #1677ff; /* Primary Base */
+  --ant-blue-7:  #0958d9;
+  --ant-blue-8:  #003eb3;
+  --ant-blue-9:  #002c8c;
+  --ant-blue-10: #001d66;
+
+  /* Green / Success */
+  --ant-green-1:  #f6ffed;
+  --ant-green-2:  #d9f7be;
+  --ant-green-3:  #b7eb8f;
+  --ant-green-4:  #95de64;
+  --ant-green-5:  #73d13d;
+  --ant-green-6:  #52c41a; /* Success Base */
+  --ant-green-7:  #389e0d;
+  --ant-green-8:  #237804;
+  --ant-green-9:  #135200;
+  --ant-green-10: #092b00;
+
+  /* Gold / Warning */
+  --ant-gold-1:  #fffbe6;
+  --ant-gold-2:  #fff1b8;
+  --ant-gold-3:  #ffe58f;
+  --ant-gold-4:  #ffd666;
+  --ant-gold-5:  #ffc53d;
+  --ant-gold-6:  #faad14; /* Warning Base */
+  --ant-gold-7:  #d48806;
+  --ant-gold-8:  #ad6800;
+  --ant-gold-9:  #874d00;
+  --ant-gold-10: #613400;
+
+  /* Red / Error / Danger */
+  --ant-red-1:  #fff2f0;
+  --ant-red-2:  #fff1f0;
+  --ant-red-3:  #ffccc7;
+  --ant-red-4:  #ffa39e;
+  --ant-red-5:  #ff7875;
+  --ant-red-6:  #ff4d4f; /* Error Base */
+  --ant-red-7:  #cf1322;
+  --ant-red-8:  #a8071a;
+  --ant-red-9:  #820014;
+  --ant-red-10: #5c0011;
+
+  /* Purple */
+  --ant-purple-1:  #f9f0ff;
+  --ant-purple-2:  #efdbff;
+  --ant-purple-3:  #d3adf7;
+  --ant-purple-4:  #b37feb;
+  --ant-purple-5:  #9254de;
+  --ant-purple-6:  #722ed1;
+  --ant-purple-7:  #531dab;
+  --ant-purple-8:  #391085;
+  --ant-purple-9:  #22075e;
+  --ant-purple-10: #120338;
+
+  /* Cyan */
+  --ant-cyan-1:  #e6fffb;
+  --ant-cyan-2:  #b5f5ec;
+  --ant-cyan-3:  #87e8de;
+  --ant-cyan-4:  #5cdbd3;
+  --ant-cyan-5:  #36cfc9;
+  --ant-cyan-6:  #13c2c2;
+  --ant-cyan-7:  #08979c;
+  --ant-cyan-8:  #006d75;
+  --ant-cyan-9:  #00474f;
+  --ant-cyan-10: #002329;
+
+  /* Magenta */
+  --ant-magenta-1:  #fff0f6;
+  --ant-magenta-2:  #ffd6e7;
+  --ant-magenta-3:  #ffadd2;
+  --ant-magenta-4:  #ff85c0;
+  --ant-magenta-5:  #f759ab;
+  --ant-magenta-6:  #eb2f96;
+  --ant-magenta-7:  #c41d7f;
+  --ant-magenta-8:  #9e1068;
+  --ant-magenta-9:  #780650;
+  --ant-magenta-10: #520339;
+
+  /* Pink */
+  --ant-pink-1:  #fff0f6;
+  --ant-pink-2:  #ffd6e7;
+  --ant-pink-3:  #ffadd2;
+  --ant-pink-4:  #ff85c0;
+  --ant-pink-5:  #f759ab;
+  --ant-pink-6:  #eb2f96;
+  --ant-pink-7:  #c41d7f;
+  --ant-pink-8:  #9e1068;
+  --ant-pink-9:  #780650;
+  --ant-pink-10: #520339;
+
+  /* Orange */
+  --ant-orange-1:  #fff7e6;
+  --ant-orange-2:  #ffe7ba;
+  --ant-orange-3:  #ffd591;
+  --ant-orange-4:  #ffc069;
+  --ant-orange-5:  #ffa940;
+  --ant-orange-6:  #fa8c16;
+  --ant-orange-7:  #d46b08;
+  --ant-orange-8:  #ad4e00;
+  --ant-orange-9:  #873800;
+  --ant-orange-10: #612500;
+
+  /* Yellow */
+  --ant-yellow-1:  #feffe6;
+  --ant-yellow-2:  #ffffb8;
+  --ant-yellow-3:  #fffb8f;
+  --ant-yellow-4:  #fff566;
+  --ant-yellow-5:  #ffec3d;
+  --ant-yellow-6:  #fadb14;
+  --ant-yellow-7:  #d4b106;
+  --ant-yellow-8:  #ad8b00;
+  --ant-yellow-9:  #876800;
+  --ant-yellow-10: #614700;
+
+  /* Volcano */
+  --ant-volcano-1:  #fff2e8;
+  --ant-volcano-2:  #ffd8bf;
+  --ant-volcano-3:  #ffbb96;
+  --ant-volcano-4:  #ff9c6e;
+  --ant-volcano-5:  #ff7a45;
+  --ant-volcano-6:  #fa541c;
+  --ant-volcano-7:  #d4380d;
+  --ant-volcano-8:  #ad2102;
+  --ant-volcano-9:  #871400;
+  --ant-volcano-10: #610b00;
+
+  /* Geekblue */
+  --ant-geekblue-1:  #f0f5ff;
+  --ant-geekblue-2:  #d6e4ff;
+  --ant-geekblue-3:  #adc6ff;
+  --ant-geekblue-4:  #85a5ff;
+  --ant-geekblue-5:  #597ef7;
+  --ant-geekblue-6:  #2f54eb;
+  --ant-geekblue-7:  #1d39c4;
+  --ant-geekblue-8:  #10239e;
+  --ant-geekblue-9:  #061178;
+  --ant-geekblue-10: #030852;
+
+  /* Lime */
+  --ant-lime-1:  #fcffe6;
+  --ant-lime-2:  #f4ffb8;
+  --ant-lime-3:  #eaff8f;
+  --ant-lime-4:  #d3f261;
+  --ant-lime-5:  #a0d911;
+  --ant-lime-6:  #7cb305;
+  --ant-lime-7:  #5b8c00;
+  --ant-lime-8:  #3f6600;
+  --ant-lime-9:  #254000;
+  --ant-lime-10: #142b00;
+
+  /* ================================================================
+     3. Backward-Compatible Legacy Brand & Feedback Primitives
+     ================================================================ */
+  --color-brand-50:  var(--ant-blue-1);
+  --color-brand-100: var(--ant-blue-2);
+  --color-brand-200: var(--ant-blue-3);
+  --color-brand-300: var(--ant-blue-4);
+  --color-brand-400: var(--ant-blue-5);
+  --color-brand-500: var(--ant-blue-6);
+  --color-brand-600: var(--ant-blue-6);
+  --color-brand-700: var(--ant-blue-7);
+  --color-brand-800: var(--ant-blue-8);
+  --color-brand-900: var(--ant-blue-9);
+
+  --color-emerald-50:  var(--ant-green-1);
+  --color-emerald-500: var(--ant-green-6);
+  --color-emerald-600: var(--ant-green-7);
+  --color-emerald-700: var(--ant-green-8);
+
+  --color-amber-50:  var(--ant-gold-1);
+  --color-amber-500: var(--ant-gold-6);
+  --color-amber-600: var(--ant-gold-7);
+  --color-amber-700: var(--ant-gold-8);
+
+  --color-rose-50:  var(--ant-red-1);
+  --color-rose-500: var(--ant-red-6);
+  --color-rose-600: var(--ant-red-7);
+  --color-rose-700: var(--ant-red-8);
+
+  --color-purple-500: var(--ant-purple-5);
+  --color-purple-600: var(--ant-purple-6);
+  --color-purple-700: var(--ant-purple-7);
+
+  /* Slate Primitives */
+  --color-slate-50:  #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* ================================================================
+     4. Ant Design Typography Tokens
+     ================================================================ */
+  --ant-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --ant-font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --ant-font-size-sm: 12px;
+  --ant-font-size:    14px; /* Base */
+  --ant-font-size-lg: 16px;
+  --ant-font-size-xl: 20px;
+
+  --ant-font-size-heading-1: 38px;
+  --ant-font-size-heading-2: 30px;
+  --ant-font-size-heading-3: 24px;
+  --ant-font-size-heading-4: 20px;
+  --ant-font-size-heading-5: 16px;
+
+  --ant-line-height-sm: 1.6666666666666667; /* 20/12 */
+  --ant-line-height:    1.5714285714285714; /* 22/14 */
+  --ant-line-height-lg: 1.5;                /* 24/16 */
+
+  --font-sans: var(--ant-font-family);
+  --font-mono: var(--ant-font-family-code);
+
+  /* ================================================================
+     5. Ant Design Spacing & Size Tokens (4px Scale)
+     ================================================================ */
+  --ant-size-unit: 4px;
+  --ant-size-step: 4px;
+
+  --ant-size-xxs: 4px;
+  --ant-size-xs:  8px;
+  --ant-size-sm:  12px;
+  --ant-size:     16px;
+  --ant-size-md:  20px;
+  --ant-size-lg:  24px;
+  --ant-size-xl:  32px;
+  --ant-size-xxl: 48px;
+
+  /* Ant Design Padding Tokens */
+  --ant-padding-xxs: 4px;
+  --ant-padding-xs:  8px;
+  --ant-padding-sm:  12px;
+  --ant-padding:     16px;
+  --ant-padding-md:  16px;
+  --ant-padding-lg:  24px;
+  --ant-padding-xl:  32px;
+
+  /* Ant Design Margin Tokens */
+  --ant-margin-xxs: 4px;
+  --ant-margin-xs:  8px;
+  --ant-margin-sm:  12px;
+  --ant-margin:     16px;
+  --ant-margin-md:  16px;
+  --ant-margin-lg:  24px;
+  --ant-margin-xl:  32px;
+  --ant-margin-xxl: 48px;
+
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+
+  /* ================================================================
+     6. Ant Design Control Heights & Border Radii
+     ================================================================ */
+  --ant-control-height-sm: 24px;
+  --ant-control-height:    32px;
+  --ant-control-height-lg: 40px;
+
+  --ant-border-radius-xs: 2px;
+  --ant-border-radius-sm: 4px;
+  --ant-border-radius:    6px;  /* Base */
+  --ant-border-radius-lg: 8px;
+  --ant-border-radius-xl: 12px;
+  --ant-border-radius-outer: 10px;
+
+  --radius-xs: var(--ant-border-radius-xs);
+  --radius-sm: var(--ant-border-radius-sm);
+  --radius-md: var(--ant-border-radius);
+  --radius:    var(--ant-border-radius-lg);
+  --radius-lg: var(--ant-border-radius-xl);
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+
+  /* ================================================================
+     7. Ant Design Motion & Transitions
+     ================================================================ */
+  /* Timing Functions based on Ant Design Motion Language */
+  --ant-motion-ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);       /* Natural entrance / deceleration */
+  --ant-motion-ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);      /* Fast exit / acceleration */
+  --ant-motion-ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);    /* Continuous state transitions */
+  --ant-motion-ease-out-back: cubic-bezier(0.18, 0.89, 0.32, 1.28);  /* Micro-rebound / button feedback */
+  --ant-motion-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);          /* Damped spring glide */
+  --ant-motion-ease-smooth: cubic-bezier(0.2, 0, 0, 1);             /* Smooth viewport scroll */
+
+  /* Durations */
+  --ant-motion-duration-fast: 0.1s;    /* Micro-interactions: button active, toggle, icon feedback */
+  --ant-motion-duration-mid:  0.2s;    /* Standard: dropdowns, accordions, popovers, tooltips */
+  --ant-motion-duration-slow: 0.28s;   /* Structural: modals, drawers, view transitions */
+  --ant-motion-duration-exit: 0.14s;   /* Performant rapid dismissal: exits move faster than entrances */
+
+  --transition-fast:   var(--ant-motion-duration-fast) var(--ant-motion-ease-out);
+  --transition-normal: var(--ant-motion-duration-mid) var(--ant-motion-ease-out);
+  --transition-slow:   var(--ant-motion-duration-slow) var(--ant-motion-ease-out);
+  --transition-exit:   var(--ant-motion-duration-exit) var(--ant-motion-ease-in);
+
+  /* ================================================================
+     8. Ant Design v4 Three-Layer Shadow & Elevation System
+     Tuple composition: (offset magnitude px, blur px, spread px, black opacity)
+     ================================================================ */
+  /* Level 0: Ground Level (no shadow) */
+  --ant-shadow-0: none;
+
+  /* Level 1: Low Elevation (interactive hover, transient elevation) */
+  --ant-shadow-1-up:    0px -1px 2px -2px rgba(0, 0, 0, 0.16), 0px -3px 6px 0px rgba(0, 0, 0, 0.12), 0px -5px 12px 4px rgba(0, 0, 0, 0.09);
+  --ant-shadow-1-down:  0px 1px 2px -2px rgba(0, 0, 0, 0.16), 0px 3px 6px 0px rgba(0, 0, 0, 0.12), 0px 5px 12px 4px rgba(0, 0, 0, 0.09);
+  --ant-shadow-1-left:  -1px 0px 2px -2px rgba(0, 0, 0, 0.16), -3px 0px 6px 0px rgba(0, 0, 0, 0.12), -5px 0px 12px 4px rgba(0, 0, 0, 0.09);
+  --ant-shadow-1-right: 1px 0px 2px -2px rgba(0, 0, 0, 0.16), 3px 0px 6px 0px rgba(0, 0, 0, 0.12), 5px 0px 12px 4px rgba(0, 0, 0, 0.09);
+
+  /* Level 2: Medium Elevation (anchored floating elements: dropdowns, popovers, select panels) */
+  --ant-shadow-2-up:    0px -3px 6px -4px rgba(0, 0, 0, 0.12), 0px -6px 16px 0px rgba(0, 0, 0, 0.08), 0px -9px 28px 8px rgba(0, 0, 0, 0.05);
+  --ant-shadow-2-down:  0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --ant-shadow-2-left:  -3px 0px 6px -4px rgba(0, 0, 0, 0.12), -6px 0px 16px 0px rgba(0, 0, 0, 0.08), -9px 0px 28px 8px rgba(0, 0, 0, 0.05);
+  --ant-shadow-2-right: 3px 0px 6px -4px rgba(0, 0, 0, 0.12), 6px 0px 16px 0px rgba(0, 0, 0, 0.08), 9px 0px 28px 8px rgba(0, 0, 0, 0.05);
+
+  /* Level 3: High Elevation (independent elevated overlays: dialogs, modals, drawers, toasts) */
+  --ant-shadow-3-up:    0px -6px 16px -8px rgba(0, 0, 0, 0.08), 0px -9px 28px 0px rgba(0, 0, 0, 0.05), 0px -12px 48px 16px rgba(0, 0, 0, 0.03);
+  --ant-shadow-3-down:  0px 6px 16px -8px rgba(0, 0, 0, 0.08), 0px 9px 28px 0px rgba(0, 0, 0, 0.05), 0px 12px 48px 16px rgba(0, 0, 0, 0.03);
+  --ant-shadow-3-left:  -6px 0px 16px -8px rgba(0, 0, 0, 0.08), -9px 0px 28px 0px rgba(0, 0, 0, 0.05), -12px 0px 48px 16px rgba(0, 0, 0, 0.03);
+  --ant-shadow-3-right: 6px 0px 16px -8px rgba(0, 0, 0, 0.08), 9px 0px 28px 0px rgba(0, 0, 0, 0.05), 12px 0px 48px 16px rgba(0, 0, 0, 0.03);
+
+  /* Directional & Level Aliases */
+  --shadow-1: var(--ant-shadow-1-down);
+  --shadow-2: var(--ant-shadow-2-down);
+  --shadow-3: var(--ant-shadow-3-down);
+}
+

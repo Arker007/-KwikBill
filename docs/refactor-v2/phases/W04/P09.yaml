@@ -1,0 +1,43 @@
+id: "W04-P09"
+title: "Taxation frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P01"
+  - "W05-P01"
+  - "W05-P02"
+objective: "Migrate GST returns and Income Tax computation modules into apps/web/src/domains/taxation."
+scope: "Frontend taxation domain views for GSTR-1, GSTR-3B, GSTR-2B, ITR-1/4 calculator, and advance tax."
+files_read:
+  - "src/pages/GSTReturnsPage.tsx"
+  - "src/pages/IncomeTaxPage.tsx"
+  - "src/features/gst-returns/components/GSTR1Tab.tsx"
+  - "src/features/income-tax/components/OldVsNewComparison.tsx"
+files_create:
+  - "apps/web/src/domains/taxation/pages/GSTReturnsPage.tsx"
+  - "apps/web/src/domains/taxation/pages/IncomeTaxPage.tsx"
+  - "apps/web/src/domains/taxation/gst/components/GSTR1View.tsx"
+  - "apps/web/src/domains/taxation/gst/components/GSTR3BView.tsx"
+  - "apps/web/src/domains/taxation/income-tax/components/TaxCalculatorView.tsx"
+  - "apps/web/src/domains/taxation/hooks/useTaxation.ts"
+  - "apps/web/src/domains/taxation/index.ts"
+actions:
+  - "Port GSTReturnsPage and IncomeTaxPage into apps/web/src/domains/taxation/."
+  - "Connect calculation engines directly to @free-gst/financial-core."
+  - "Maintain re-exports in src/features/gst-returns/ and src/features/income-tax/."
+preserve:
+  - "Preserve statutory Indian GST JSON export schema for direct government portal upload."
+  - "Preserve Budget 2025 income tax regime comparisons and Section 234 interest breakdown."
+acceptance:
+  - "GST returns and income tax views render accurately with zero formula drift."
+  - "All 70 tax tests pass."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "npm run build"
+rollback:
+  - "Restore src/features/gst-returns/ and income-tax/ original files."
+risks:
+  - "Floating-point discrepancies if UI components recalculate rather than consuming financial-core."
+context_refs:
+  - "src/pages/GSTReturnsPage.tsx"
+  - "src/pages/IncomeTaxPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

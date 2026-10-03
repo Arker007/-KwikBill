@@ -1,0 +1,35 @@
+id: "W04-P06"
+title: "Recurring Billing frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P05"
+objective: "Migrate recurring invoice templates and scheduling views into apps/web/src/domains/recurring-billing."
+scope: "Frontend recurring billing domain views, template modals, and schedule frequency pickers."
+files_read:
+  - "src/pages/RecurringPage.tsx"
+  - "src/features/recurring/components/RecurringModal.tsx"
+  - "src/features/recurring/hooks/useRecurring.ts"
+files_create:
+  - "apps/web/src/domains/recurring-billing/pages/RecurringBillingPage.tsx"
+  - "apps/web/src/domains/recurring-billing/components/RecurringTemplateModal.tsx"
+  - "apps/web/src/domains/recurring-billing/components/RecurringTemplatesTable.tsx"
+  - "apps/web/src/domains/recurring-billing/hooks/useRecurringBilling.ts"
+  - "apps/web/src/domains/recurring-billing/index.ts"
+actions:
+  - "Port RecurringPage, RecurringModal, and templates table into apps/web/src/domains/recurring-billing/."
+  - "Wire useRecurringBilling hook to API endpoints."
+  - "Maintain re-exports in src/features/recurring/ and src/pages/RecurringPage.tsx."
+preserve:
+  - "Preserve nextDueDate calculation and auto-create flags."
+acceptance:
+  - "Recurring billing view renders and creates recurring profiles cleanly."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/recurring/ original files."
+risks:
+  - "Missing frequency enum values in interval dropdowns."
+context_refs:
+  - "src/pages/RecurringPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

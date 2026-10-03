@@ -1,0 +1,37 @@
+id: "W03-P06"
+title: "Recurring Billing backend module"
+status: "completed"
+depends_on:
+  - "W03-P05"
+objective: "Migrate recurring billing schedule management and auto-generation into apps/api/src/modules/recurring-billing."
+scope: "Backend recurring controller, service, repository, and schedule calculation engine."
+files_read:
+  - "server/modules/recurring/recurring.controller.js"
+  - "server/modules/recurring/recurring.service.js"
+  - "server/modules/recurring/recurring.repository.js"
+  - "server/modules/recurring/recurring.routes.js"
+files_create:
+  - "apps/api/src/modules/recurring-billing/recurring.controller.ts"
+  - "apps/api/src/modules/recurring-billing/recurring.service.ts"
+  - "apps/api/src/modules/recurring-billing/recurring.repository.ts"
+  - "apps/api/src/modules/recurring-billing/recurring.routes.ts"
+  - "apps/api/src/modules/recurring-billing/index.ts"
+actions:
+  - "Port recurring repository to apps/api/src/modules/recurring-billing/recurring.repository.ts using SqliteCollectionRepository('recurring')."
+  - "Port next billing date calculation, schedule frequency rules, and bill generator to recurring.service.ts."
+  - "Expose GET /api/recurring, POST /api/recurring, and DELETE /api/recurring in recurring.routes.ts."
+  - "Maintain legacy re-exports in server/modules/recurring/."
+preserve:
+  - "Preserve nextDueDate computation across monthly, quarterly, semi-annual, and annual cycles."
+acceptance:
+  - "GET /api/recurring returns 200 with recurring template list."
+  - "Template creation and update operations succeed."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert server/modules/recurring/ re-exports."
+risks:
+  - "Invalid date calculation for end-of-month recurrence dates (e.g. Feb 28/29)."
+context_refs:
+  - "server/modules/recurring/recurring.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

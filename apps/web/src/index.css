@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@import '@/styles/index.css';
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    --tw-ring-color: transparent !important;
+    --tw-ring-offset-color: transparent !important;
+    --tw-ring-shadow: none !important;
+    --tw-ring-offset-shadow: none !important;
+  }
+
+  input:focus,
+  input:focus-visible,
+  select:focus,
+  select:focus-visible,
+  textarea:focus,
+  textarea:focus-visible,
+  [contenteditable="true"]:focus,
+  [contenteditable="true"]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #000000 !important;
+  }
+
+  [data-theme="dark"] input:focus,
+  [data-theme="dark"] input:focus-visible,
+  [data-theme="dark"] select:focus,
+  [data-theme="dark"] select:focus-visible,
+  [data-theme="dark"] textarea:focus,
+  [data-theme="dark"] textarea:focus-visible,
+  [data-theme="dark"] [contenteditable="true"]:focus,
+  [data-theme="dark"] [contenteditable="true"]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #ffffff !important;
+  }
+}
+
+/* ================================================================
+   Universal Slim Scrollbar Styles (All Elements & Custom Containers)
+   ================================================================ */
+
+/* Standard CSS3 thin scrollbars (Firefox, modern Chrome/Edge/Safari) */
+html,
+body,
+*,
+*::before,
+*::after {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(156, 163, 175, 0.45) transparent !important;
+}
+
+[data-theme="dark"],
+[data-theme="dark"] *,
+[data-theme="dark"] *::before,
+[data-theme="dark"] *::after {
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent !important;
+}
+
+/* Universal WebKit/Blink slim scrollbars (Chrome, Safari, Edge, Opera, Electron) */
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.45) !important;
+  border-radius: 9999px !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box !important;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.75) !important;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3) !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(209, 213, 219, 0.65) !important;
+}
+
+/* Ant Design Select & virtual list custom CSS variables */
+:root {
+  --rc-virtual-list-scrollbar-bg: rgba(156, 163, 175, 0.45) !important;
+}
+
+[data-theme="dark"] {
+  --rc-virtual-list-scrollbar-bg: rgba(156, 163, 175, 0.3) !important;
+}
+
+/* HTML-rendered virtual scrollbars in rc-virtual-list / Ant Design Select dropdowns (.ant-select-dropdown-list-scrollbar) */
+.ant-select-dropdown-list-scrollbar,
+.ant-select-dropdown-list-scrollbar-vertical,
+.slim-select-dropdown .ant-select-dropdown-list-scrollbar,
+.rc-virtual-list-scrollbar,
+.rc-virtual-list-scrollbar-vertical,
+[class*="-dropdown-list-scrollbar"],
+[class*="virtual-list-scrollbar"],
+[class*="rc-listy-scrollbar"] {
+  width: 4px !important;
+  right: 2px !important;
+}
+
+.ant-select-dropdown-list-scrollbar-thumb,
+.slim-select-dropdown .ant-select-dropdown-list-scrollbar-thumb,
+.rc-virtual-list-scrollbar-thumb,
+[class*="-dropdown-list-scrollbar-thumb"],
+[class*="virtual-list-scrollbar-thumb"],
+[class*="rc-listy-scrollbar-thumb"],
+[class*="-scrollbar-thumb"] {
+  width: 4px !important;
+  background: rgba(156, 163, 175, 0.45) !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.15s ease;
+}
+
+.ant-select-dropdown-list-scrollbar-thumb:hover,
+.slim-select-dropdown .ant-select-dropdown-list-scrollbar-thumb:hover,
+.rc-virtual-list-scrollbar-thumb:hover,
+[class*="-dropdown-list-scrollbar-thumb"]:hover,
+[class*="virtual-list-scrollbar-thumb"]:hover,
+[class*="rc-listy-scrollbar-thumb"]:hover,
+[class*="-scrollbar-thumb"]:hover {
+  background: rgba(107, 114, 128, 0.75) !important;
+}
+
+[data-theme="dark"] .ant-select-dropdown-list-scrollbar-thumb,
+[data-theme="dark"] .slim-select-dropdown .ant-select-dropdown-list-scrollbar-thumb,
+[data-theme="dark"] [class*="-dropdown-list-scrollbar-thumb"],
+[data-theme="dark"] [class*="virtual-list-scrollbar-thumb"] {
+  background: rgba(156, 163, 175, 0.3) !important;
+}
+
+[data-theme="dark"] .ant-select-dropdown-list-scrollbar-thumb:hover,
+[data-theme="dark"] .slim-select-dropdown .ant-select-dropdown-list-scrollbar-thumb:hover,
+[data-theme="dark"] [class*="-dropdown-list-scrollbar-thumb"]:hover,
+[data-theme="dark"] [class*="virtual-list-scrollbar-thumb"]:hover {
+  background: rgba(209, 213, 219, 0.65) !important;
+}
+
+/* Virtual list holder containers */
+.ant-select-dropdown-list-holder,
+.rc-virtual-list-holder,
+[class*="-dropdown-list-holder"],
+[class*="virtual-list-holder"] {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(156, 163, 175, 0.45) transparent !important;
+}
+
+.ant-select-dropdown-list-holder::-webkit-scrollbar,
+.rc-virtual-list-holder::-webkit-scrollbar,
+[class*="-dropdown-list-holder"]::-webkit-scrollbar,
+[class*="virtual-list-holder"]::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+.ant-select-dropdown-list-holder::-webkit-scrollbar-thumb,
+.rc-virtual-list-holder::-webkit-scrollbar-thumb,
+[class*="-dropdown-list-holder"]::-webkit-scrollbar-thumb,
+[class*="virtual-list-holder"]::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.45) !important;
+  border-radius: 9999px !important;
+}
+
+.ant-select-dropdown-list-holder::-webkit-scrollbar-thumb:hover,
+.rc-virtual-list-holder::-webkit-scrollbar-thumb:hover,
+[class*="-dropdown-list-holder"]::-webkit-scrollbar-thumb:hover,
+[class*="virtual-list-holder"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.75) !important;
+}
+

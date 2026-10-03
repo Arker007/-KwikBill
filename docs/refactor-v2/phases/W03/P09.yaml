@@ -1,0 +1,36 @@
+id: "W03-P09"
+title: "Taxation & Reporting backend modules"
+status: "completed"
+depends_on:
+  - "W03-P05"
+  - "W03-P07"
+objective: "Create backend domain modules for statutory tax reporting and financial aggregation services."
+scope: "Backend tax summary calculation, GSTR data consolidation, P&L aggregation, and sales report services."
+files_read:
+  - "src/features/gst-returns/services/gstReturnsService.ts"
+  - "src/features/reports/services/reportDataService.ts"
+files_create:
+  - "apps/api/src/modules/taxation/taxation.service.ts"
+  - "apps/api/src/modules/taxation/taxation.routes.ts"
+  - "apps/api/src/modules/taxation/index.ts"
+  - "apps/api/src/modules/reporting/reporting.service.ts"
+  - "apps/api/src/modules/reporting/reporting.routes.ts"
+  - "apps/api/src/modules/reporting/index.ts"
+actions:
+  - "Implement taxation.service.ts aggregating bills, expenses, and purchases into GSTR-1, GSTR-3B, and Section 51/194Q TDS summaries."
+  - "Implement reporting.service.ts calculating date-filtered sales totals, tax liability, customer aging buckets, and profit & loss."
+  - "Expose GET /api/taxation/summary and GET /api/reports/summary endpoints."
+  - "Mount routers in apps/api app bootstrap."
+preserve:
+  - "Maintain exact statutory Indian tax return schemas and HSN-wise summary groupings."
+acceptance:
+  - "Endpoints return aggregated financial numbers with 0 paisa discrepancies against bill totals."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Unmount taxation and reporting routes in apps/api."
+risks:
+  - "Performance bottlenecks when aggregating large bill collections without SQL indexes."
+context_refs:
+  - "docs/refactor-v2/ARCHITECTURE.md"

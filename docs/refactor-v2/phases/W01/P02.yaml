@@ -1,0 +1,33 @@
+id: "W01-P02"
+title: "Shared build and packaging presets (packages/config)"
+status: "completed"
+depends_on:
+  - "W01-P01"
+objective: "Establish packages/config containing shared TypeScript, Tailwind CSS, and build presets."
+scope: "Creation of packages/config with reusable compiler presets and Tailwind tokens."
+files_read:
+  - "tsconfig.base.json"
+files_create:
+  - "packages/config/package.json"
+  - "packages/config/tsconfig/react.json"
+  - "packages/config/tsconfig/node.json"
+  - "packages/config/tailwind/preset.js"
+  - "packages/config/index.js"
+actions:
+  - "Create packages/config/package.json with name '@free-gst/config' and main exports."
+  - "Create packages/config/tsconfig/react.json for React/Vite web apps with JSX preserve and DOM types."
+  - "Create packages/config/tsconfig/node.json for Express API apps with Node.js 22 types and ESNext module resolution."
+  - "Create packages/config/tailwind/preset.js exporting brand colors, semantic tokens, and typography."
+preserve:
+  - "Do not alter root tsconfig.json or vite.config.js yet."
+acceptance:
+  - "packages/config package compiles and exports configs cleanly."
+verify:
+  - "node -e 'import(\"./packages/config/index.js\")'"
+  - "npm run build"
+rollback:
+  - "Remove packages/config/ directory."
+risks:
+  - "Path resolution conflicts in workspace symlinks."
+context_refs:
+  - "docs/refactor-v2/ARCHITECTURE.md"

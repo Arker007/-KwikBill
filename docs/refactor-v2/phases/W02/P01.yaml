@@ -1,0 +1,40 @@
+id: "W02-P01"
+title: "Common API Contracts package (packages/api-contracts)"
+status: "completed"
+depends_on:
+  - "W01-P01"
+objective: "Consolidate DTOs, endpoint schemas, request/response models, and TypeScript interfaces into packages/api-contracts."
+scope: "Creation of packages/api-contracts with strong types for Invoices, Items, Clients, Products, Expenses, and Returns."
+files_read:
+  - "src/shared/types/index.ts"
+  - "src/features/invoices/types/index.ts"
+  - "src/features/clients/types/index.ts"
+files_create:
+  - "packages/api-contracts/package.json"
+  - "packages/api-contracts/tsconfig.json"
+  - "packages/api-contracts/src/index.ts"
+  - "packages/api-contracts/src/common/pagination.ts"
+  - "packages/api-contracts/src/invoicing/invoice.dto.ts"
+  - "packages/api-contracts/src/customers/customer.dto.ts"
+  - "packages/api-contracts/src/catalog/product.dto.ts"
+actions:
+  - "Create packages/api-contracts/package.json with name '@free-gst/api-contracts'."
+  - "Extract canonical invoice DTOs, line item structures, and tax breakdown types into packages/api-contracts/src/invoicing/invoice.dto.ts."
+  - "Extract customer and vendor types into packages/api-contracts/src/customers/customer.dto.ts."
+  - "Extract product catalog and inventory types into packages/api-contracts/src/catalog/product.dto.ts."
+  - "Export all types via packages/api-contracts/src/index.ts."
+preserve:
+  - "Retain existing src/shared/types/index.ts re-exporting from packages/api-contracts for zero frontend regression."
+acceptance:
+  - "packages/api-contracts compiles cleanly with tsc --build."
+  - "Existing frontend types continue resolving via facade."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "npm run build"
+rollback:
+  - "Delete packages/api-contracts/ directory and revert any facade imports."
+risks:
+  - "Subtle TypeScript interface drift between backend runtime payloads and frontend types."
+context_refs:
+  - "src/shared/types/index.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

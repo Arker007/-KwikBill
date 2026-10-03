@@ -1,0 +1,39 @@
+id: "W04-P03"
+title: "Customers frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P01"
+  - "W02-P03"
+objective: "Migrate client directory, customer modal, and customer ledger into apps/web/src/domains/customers."
+scope: "Frontend customers domain with ledger calculations, avatar badges, and search filtering."
+files_read:
+  - "src/pages/ClientsPage.tsx"
+  - "src/features/clients/components/ClientModal.tsx"
+  - "src/features/clients/components/ClientsTable.tsx"
+  - "src/features/clients/hooks/useClients.ts"
+files_create:
+  - "apps/web/src/domains/customers/pages/CustomersPage.tsx"
+  - "apps/web/src/domains/customers/components/CustomerModal.tsx"
+  - "apps/web/src/domains/customers/components/CustomersTable.tsx"
+  - "apps/web/src/domains/customers/components/CustomerLedgerModal.tsx"
+  - "apps/web/src/domains/customers/hooks/useCustomers.ts"
+  - "apps/web/src/domains/customers/index.ts"
+actions:
+  - "Port ClientsPage, ClientModal, and ClientsTable into apps/web/src/domains/customers/."
+  - "Wire useCustomers hook to @free-gst/api-client customer endpoints."
+  - "Re-export customer components from src/features/clients/."
+preserve:
+  - "Preserve customer balance computations, statement generation, and GSTIN auto-fill behavior."
+acceptance:
+  - "Customers list renders, creates, edits, and deletes client records."
+  - "npm run build passes without errors."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert facade re-exports in src/features/clients/."
+risks:
+  - "State mutation errors when updating opening balances."
+context_refs:
+  - "src/pages/ClientsPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

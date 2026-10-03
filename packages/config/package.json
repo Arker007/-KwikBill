@@ -1,0 +1,13 @@
+{
+  "name": "@free-gst/config",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./tailwind": "./tailwind/preset.js",
+    "./tsconfig/react": "./tsconfig/react.json",
+    "./tsconfig/node": "./tsconfig/node.json"
+  }
+}

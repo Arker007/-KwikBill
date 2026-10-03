@@ -1,0 +1,41 @@
+id: "W08-P01"
+title: "Test harness consolidation into tests/{contract,security,migration,e2e}"
+status: "completed"
+depends_on:
+  - "W03-P10"
+  - "W04-P12"
+objective: "Consolidate and normalize smoke tests, contract tests, security tests, and parity harnesses into top-level tests/ directories."
+scope: "Reorganizing test files into tests/e2e, tests/contract, tests/security, and tests/migration."
+files_read:
+  - "tests/smoke.mjs"
+  - "tests/integration/apiContract.test.mjs"
+  - "tests/integration/security.test.mjs"
+  - "scripts/verify-migration-parity.mjs"
+  - "scripts/test-sqlite-repository.mjs"
+files_create:
+  - "tests/e2e/smoke.test.mjs"
+  - "tests/contract/apiContract.test.mjs"
+  - "tests/security/security.test.mjs"
+  - "tests/migration/parity.test.mjs"
+  - "tests/migration/repository.test.mjs"
+actions:
+  - "Copy tests/smoke.mjs to tests/e2e/smoke.test.mjs and update path references."
+  - "Move tests/integration/apiContract.test.mjs to tests/contract/apiContract.test.mjs."
+  - "Move tests/integration/security.test.mjs to tests/security/security.test.mjs."
+  - "Copy parity and repository scripts to tests/migration/."
+  - "Update package.json test scripts to target new test paths while maintaining root wrappers."
+preserve:
+  - "Preserve native node:test runner and zero external test runner dependencies."
+acceptance:
+  - "All consolidated test suites execute cleanly using node runner."
+verify:
+  - "node tests/e2e/smoke.test.mjs"
+  - "node tests/security/security.test.mjs"
+rollback:
+  - "Restore tests/smoke.mjs and tests/integration/ original files."
+risks:
+  - "Broken relative paths when executing tests from subdirectories."
+context_refs:
+  - "tests/smoke.mjs"
+  - "tests/integration/security.test.mjs"
+  - "docs/refactor-v2/ARCHITECTURE.md"

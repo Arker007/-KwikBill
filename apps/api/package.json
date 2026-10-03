@@ -1,0 +1,11 @@
+{
+  "name": "@free-gst/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/bootstrap/index.ts",
+  "types": "./src/bootstrap/index.ts",
+  "dependencies": {
+    "@free-gst/api-contracts": "workspace:*"
+  }
+}

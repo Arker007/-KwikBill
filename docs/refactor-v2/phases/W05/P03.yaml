@@ -1,0 +1,35 @@
+id: "W05-P03"
+title: "Package integration with backend and frontend invoicing engines"
+status: "pending"
+depends_on:
+  - "W05-P01"
+  - "W03-P05"
+  - "W04-P05"
+objective: "Wire packages/financial-core as the authoritative statutory calculation engine across backend and frontend invoicing."
+scope: "Direct consumption of @free-gst/financial-core in invoicing controllers, validators, and editor hooks."
+files_read:
+  - "apps/api/src/modules/invoicing/invoicing.service.ts"
+  - "apps/web/src/domains/invoicing/hooks/useInvoiceForm.ts"
+files_change:
+  - "apps/api/src/modules/invoicing/invoicing.service.ts"
+  - "apps/web/src/domains/invoicing/hooks/useInvoiceForm.ts"
+actions:
+  - "Update backend invoicing.service.ts to validate and compute line items using @free-gst/financial-core computeInvoiceTotals."
+  - "Update frontend useInvoiceForm.ts to calculate totals using @free-gst/financial-core."
+  - "Ensure zero discrepancies between client-side preview totals and backend saved totals."
+preserve:
+  - "Preserve integer Paisa conversion on backend persistence boundary."
+acceptance:
+  - "Backend rejects bills with mathematically inconsistent line item taxes."
+  - "All 70 tax tests, 9 discount tests, and smoke tests pass."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert invoicing.service.ts and useInvoiceForm.ts imports to local utility facades."
+risks:
+  - "Double rounding if both client and server apply differing rounding strategies."
+context_refs:
+  - "packages/financial-core/src/tax/taxCalculation.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

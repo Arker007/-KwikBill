@@ -1,0 +1,47 @@
+id: "W03-P07"
+title: "Purchasing & Expenses backend modules"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Migrate vendor purchase bills and expense tracking into apps/api/src/modules/purchasing and expenses."
+scope: "Backend purchasing and expenses controllers, services, repositories, and statutory ITC categorization."
+files_read:
+  - "server/modules/purchases/purchases.controller.js"
+  - "server/modules/purchases/purchases.service.js"
+  - "server/modules/purchases/purchases.repository.js"
+  - "server/modules/purchases/purchases.routes.js"
+  - "server/modules/expenses/expenses.controller.js"
+  - "server/modules/expenses/expenses.service.js"
+  - "server/modules/expenses/expenses.repository.js"
+  - "server/modules/expenses/expenses.routes.js"
+files_create:
+  - "apps/api/src/modules/purchasing/purchasing.controller.ts"
+  - "apps/api/src/modules/purchasing/purchasing.service.ts"
+  - "apps/api/src/modules/purchasing/purchasing.repository.ts"
+  - "apps/api/src/modules/purchasing/purchasing.routes.ts"
+  - "apps/api/src/modules/purchasing/index.ts"
+  - "apps/api/src/modules/expenses/expenses.controller.ts"
+  - "apps/api/src/modules/expenses/expenses.service.ts"
+  - "apps/api/src/modules/expenses/expenses.repository.ts"
+  - "apps/api/src/modules/expenses/expenses.routes.ts"
+  - "apps/api/src/modules/expenses/index.ts"
+actions:
+  - "Port purchases repository using SqliteCollectionRepository('purchases') and expenses repository using SqliteCollectionRepository('expenses')."
+  - "Port Input Tax Credit (ITC) eligibility breakdown (Eligible / Ineligible §17(5)) into expenses.service.ts."
+  - "Expose GET /api/purchases, POST /api/purchases, GET /api/expenses, POST /api/expenses."
+  - "Re-export modules in server/modules/purchases/ and server/modules/expenses/."
+preserve:
+  - "Preserve ITC tax breakdown and vendor GSTIN verification logic."
+acceptance:
+  - "GET /api/purchases and GET /api/expenses return 200 arrays."
+  - "Smoke tests subtests 5 and 6 pass cleanly."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore original files in server/modules/purchases/ and expenses/."
+risks:
+  - "Mismatch in ITC credit eligibility flags across fiscal quarters."
+context_refs:
+  - "server/modules/purchases/purchases.routes.js"
+  - "server/modules/expenses/expenses.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

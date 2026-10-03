@@ -1,0 +1,32 @@
+id: "W08-P02"
+title: "Security gate verification: Path traversal & input sanitization"
+status: "completed"
+depends_on:
+  - "W08-P01"
+objective: "Verify that all backend endpoints and file access utilities strictly reject path traversal attacks, parent directories, and null bytes."
+scope: "Execution and assertion of comprehensive path traversal fuzzing suite across all document and storage APIs."
+files_read:
+  - "tests/security/security.test.mjs"
+  - "apps/api/src/platform/middleware/pathSanitizer.ts"
+  - "apps/api/src/shared/utils/pathUtils.ts"
+files_change:
+  - "tests/security/security.test.mjs"
+actions:
+  - "Expand tests/security/security.test.mjs to fuzz all document ID endpoints with ../, ..\\, %2e%2e, null bytes, and absolute paths."
+  - "Verify that all attempts return HTTP 400 Bad Request with descriptive error response."
+  - "Verify that pathUtils.safeFileName rejects traversal attempts."
+preserve:
+  - "Preserve legitimate slash-encoded invoice IDs (e.g. INV/2026-27/0001) while rejecting ../."
+acceptance:
+  - "Security test suite passes 100% of traversal assertions."
+  - "Zero path traversal vulnerabilities exist across any route."
+verify:
+  - "node tests/security/security.test.mjs"
+rollback:
+  - "Revert security test file modifications."
+risks:
+  - "Over-strict regex accidentally rejecting legitimate invoice separators like slashes or dashes."
+context_refs:
+  - "SECURITY.md"
+  - "RULES.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

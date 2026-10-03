@@ -1,0 +1,37 @@
+id: "W03-P08"
+title: "Payments & Allocations backend module"
+status: "completed"
+depends_on:
+  - "W03-P05"
+objective: "Migrate payment receipts and bill allocation tracking into apps/api/src/modules/payments."
+scope: "Backend receipts controller, service, repository, and multi-bill allocation engine."
+files_read:
+  - "server/modules/receipts/receipts.controller.js"
+  - "server/modules/receipts/receipts.service.js"
+  - "server/modules/receipts/receipts.repository.js"
+  - "server/modules/receipts/receipts.routes.js"
+files_create:
+  - "apps/api/src/modules/payments/payments.controller.ts"
+  - "apps/api/src/modules/payments/payments.service.ts"
+  - "apps/api/src/modules/payments/payments.repository.ts"
+  - "apps/api/src/modules/payments/payments.routes.ts"
+  - "apps/api/src/modules/payments/index.ts"
+actions:
+  - "Port receipts repository to apps/api/src/modules/payments/payments.repository.ts using SqliteCollectionRepository('receipts')."
+  - "Port payment receipt numbering, balance allocation across unpaid bills, and voucher generation to payments.service.ts."
+  - "Expose GET /api/receipts, POST /api/receipts, and DELETE /api/receipts."
+  - "Re-export from server/modules/receipts/ for seamless backward compatibility."
+preserve:
+  - "Preserve payment mode tracking (Cash, Bank, UPI, Cheque) and bill outstanding balance deduction."
+acceptance:
+  - "GET /api/receipts returns 200 with receipt records."
+  - "Receipt creation and multi-bill allocation succeed."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore server/modules/receipts/ original files."
+risks:
+  - "Over-allocation of payment receipts exceeding bill gross total."
+context_refs:
+  - "server/modules/receipts/receipts.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

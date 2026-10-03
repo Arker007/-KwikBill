@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-09-23T10:53:44Z",
+  "phase": "W00-P01",
+  "verification_status": "PASSED",
+  "test_suites": {
+    "tax_calculation": {
+      "command": "node scripts/tax-test.mjs",
+      "total": 70,
+      "passed": 70,
+      "failed": 0
+    },
+    "discount_modes": {
+      "command": "node scripts/discount-modes-test.mjs",
+      "total": 9,
+      "passed": 9,
+      "failed": 0
+    },
+    "smoke_http": {
+      "command": "node tests/smoke.mjs",
+      "total": 23,
+      "passed": 23,
+      "failed": 0
+    }
+  },
+  "data_snapshot": {
+    "location": "data/backups/pre-sql-migration-2026-09-23T10-53-37-513Z",
+    "manifest": "snapshot-manifest.json",
+    "scanned_files": 4,
+    "corrupted_files": 0,
+    "financial_baseline_paisa": {
+      "totalBilledPaisa": 0,
+      "totalTaxPaisa": 0,
+      "totalPaidPaisa": 0,
+      "totalExpensesPaisa": 0,
+      "totalPurchasesPaisa": 0
+    }
+  }
+}

@@ -1,0 +1,34 @@
+id: "W09-P02"
+title: "Legacy data directory archiving to data/legacy-json"
+status: "completed"
+depends_on:
+  - "W09-P01"
+  - "W06-P04"
+objective: "Archive legacy flat-file JSON collections into data/legacy-json/ while retaining data/sqlite/accounting.db as primary."
+scope: "Restructuring data/ directory to target architecture: data/sqlite, data/legacy-json, data/backups, data/uploads, data/exports."
+files_read:
+  - "apps/api/src/config/paths.ts"
+  - "apps/api/src/infrastructure/persistence/sqlite.ts"
+files_create:
+  - "data/legacy-json/ARCHIVE_MANIFEST.json"
+actions:
+  - "Ensure directories exist: data/sqlite/, data/legacy-json/, data/backups/, data/uploads/, data/exports/."
+  - "Move accounting.db (and WAL/SHM files) into data/sqlite/accounting.db if not already located there."
+  - "Copy flat-file JSON collections (bills/, clients/, products/, etc.) into data/legacy-json/ for permanent offline disaster recovery."
+  - "Generate data/legacy-json/ARCHIVE_MANIFEST.json recording document counts and checksums."
+  - "Update storage configuration paths in apps/api/src/config/paths.ts."
+preserve:
+  - "NEVER delete user data; retain both SQLite and archived JSON records."
+acceptance:
+  - "All collections are queryable via SQLite primary engine."
+  - "JSON archive manifest is generated with 0 missing documents."
+verify:
+  - "node tests/migration/parity.test.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore data/ directory from data/backups/ snapshot."
+risks:
+  - "Lock contention if SQLite file is moved while server process is running."
+context_refs:
+  - "apps/api/src/config/paths.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

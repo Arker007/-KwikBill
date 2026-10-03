@@ -1,0 +1,40 @@
+#!/bin/bash
+FILES=(
+  "src/App.jsx"
+  "src/components/BillOCR.jsx"
+  "src/components/ClientModal.jsx"
+  "src/components/ClientsView.jsx"
+  "src/components/ConfirmModal.jsx"
+  "src/components/ControlPanel.jsx"
+  "src/components/Dashboard.jsx"
+  "src/components/ExpenseTracker.jsx"
+  "src/components/GSTReturns.jsx"
+  "src/components/HelpButton.jsx"
+  "src/components/IncomeTax.jsx"
+  "src/components/InventoryView.jsx"
+  "src/components/PageHeader.jsx"
+  "src/components/PrintPreviewModal.jsx"
+  "src/components/PrintSettings.jsx"
+  "src/components/PurchaseBills.jsx"
+  "src/components/ReceiptVoucher.jsx"
+  "src/components/RecurringInvoices.jsx"
+  "src/components/ReportsView.jsx"
+  "src/components/SettingsView.jsx"
+  "src/components/SetupWizard.jsx"
+  "src/components/Toast.jsx"
+  "src/components/UnassignedBanner.jsx"
+  "src/components/UserGuideView.jsx"
+  "src/components/WelcomeGuide.jsx"
+  "src/services/googleDrive.js"
+  "src/store.js"
+  "src/userGuideContent.js"
+  "src/utils/printSettings.js"
+  "src/utils/share.js"
+)
+for file in "${FILES[@]}"; do
+  if [ ! -f "$file" ]; then
+    echo "Downloading $file..."
+    mkdir -p "$(dirname "$file")"
+    echo "No download source configured for $file"
+  fi
+done

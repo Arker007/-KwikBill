@@ -1,0 +1,39 @@
+id: "W08-P03"
+title: "Comprehensive financial and discount parity regression audit"
+status: "completed"
+depends_on:
+  - "W05-P03"
+  - "W06-P04"
+  - "W08-P01"
+objective: "Execute full statutory GST tax tests, discount modes suite, CSV exports, and verify 100% financial calculation parity."
+scope: "Execution and audit of all 70 tax calculations, 9 discount calculation modes, and CSV export reconciliation."
+files_read:
+  - "scripts/tax-test.mjs"
+  - "scripts/discount-modes-test.mjs"
+  - "scripts/csv-test.mjs"
+files_create:
+  - "tests/e2e/financialAudit.test.mjs"
+actions:
+  - "Run node scripts/tax-test.mjs and assert 70/70 pass."
+  - "Run node scripts/discount-modes-test.mjs and assert 9/9 pass."
+  - "Execute scripts/csv-test.mjs to verify generated CSV report columns match statutory formats."
+  - "Create tests/e2e/financialAudit.test.mjs executing edge-case tax scenarios (RCM backout, §119A rounding, TDS/TCS thresholds)."
+preserve:
+  - "Statutory GST and Income Tax formulas must remain completely unaltered."
+acceptance:
+  - "All tax tests pass with 0 errors."
+  - "All discount mode tests pass with 0 errors."
+  - "Financial audit passes with zero paisa variance across all invoices."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+  - "node scripts/csv-test.mjs"
+  - "node tests/e2e/financialAudit.test.mjs"
+rollback:
+  - "If any calculation fails, immediately revert changes made in W05."
+risks:
+  - "Floating-point precision rounding differences in multi-currency conversions."
+context_refs:
+  - "scripts/tax-test.mjs"
+  - "scripts/discount-modes-test.mjs"
+  - "RULES.md"

@@ -1,0 +1,222 @@
+import { BILLS_DIR, RECURRING_DIR, PROFILES_DIR, PROFILE_FILE, META_FILE } from '../../config/paths.ts';
+import { readJsonSafe } from '../../../../../server/shared/utils/atomicFs.js';
+import { logErrorToFile } from '../../../../../server/shared/middleware/errorHandler.js';
+import { CollectionRepository, SingleFileRepository } from '../persistence/index.ts';
+import { computeInvoiceTotals } from '../../../../../src/features/invoices/utils/taxCalculation.js';
+
+const recurringCollection = new CollectionRepository(RECURRING_DIR);
+const profilesCollection = new CollectionRepository(PROFILES_DIR);
+const billsCollection = new CollectionRepository(BILLS_DIR);
+const metaStorage = new SingleFileRepository(META_FILE, {});
+
+/**
+ * Advances a recurring date string by frequency and interval.
+ */
+export function advanceDate(dateStr: string, frequency: string, interval: number | string): string {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  const n = Math.max(1, parseInt(String(interval), 10) || 1);
+  if (frequency === 'weekly') d.setDate(d.getDate() + 7 * n);
+  else if (frequency === 'quarterly') d.setMonth(d.getMonth() + 3 * n);
+  else if (frequency === 'yearly') d.setFullYear(d.getFullYear() + n);
+  else d.setMonth(d.getMonth() + n); // default: monthly
+  return d.toISOString().split('T')[0];
+}
+
+/**
+ * Generates next sequential invoice number atomically via meta.json and SQLite counters.
+ */
+export function nextInvoiceNumber(prefix: string): string {
+  const key = `counter_${prefix}`;
+  const meta = (metaStorage.get({}) || {}) as Record<string, any>;
+  const cfg = {
+    format: 'branded',
+    brandPrefix: '',
+    separator: '/',
+    showFinYear: true,
+    padDigits: 4,
+    ...((meta.invoiceNumberSettings as any) || {}),
+  };
+  const next = (Number(meta[key]) || 0) + 1;
+  meta[key] = next;
+  metaStorage.set(meta);
+
+  if (cfg.format === 'random') {
+    return `${cfg.brandPrefix || prefix}${cfg.separator}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+  }
+  const sep = cfg.separator || '/';
+  const pfx = cfg.brandPrefix || prefix;
+  const padded = String(next).padStart(cfg.padDigits || 4, '0');
+  if (cfg.showFinYear) {
+    const y = new Date().getFullYear();
+    return `${pfx}${sep}${y}-${String(y + 1).slice(-2)}${sep}${padded}`;
+  }
+  return `${pfx}${sep}${padded}`;
+}
+
+/**
+ * Iterates over all active recurring templates and generates due invoices.
+ */
+export async function processDueRecurring(): Promise<number> {
+  const today = new Date().toISOString().split('T')[0];
+  const templates = (recurringCollection.findAll() || []) as any[];
+  let fired = 0;
+  const yieldToLoop = (): Promise<void> => new Promise((r) => setImmediate(r));
+
+  for (const tpl of templates) {
+    await yieldToLoop();
+    if (!tpl || !tpl.active) continue;
+    if (!tpl.nextDate || tpl.nextDate > today) continue;
+    // End conditions
+    if (tpl.endMode === 'onDate' && tpl.endDate && today > tpl.endDate) continue;
+    if (tpl.endMode === 'afterN' && tpl.maxOccurrences && (tpl.occurrencesCreated || 0) >= tpl.maxOccurrences) continue;
+
+    try {
+      const profiles = (profilesCollection.findAll() || []) as any[];
+      let profile = profiles.find((p) => p.id && tpl.profileId && p.id === tpl.profileId)
+                 || profiles.find((p) => p.businessName === tpl.profileBusinessName)
+                 || readJsonSafe(PROFILE_FILE, {});
+
+      const prefix = (tpl.invoiceType === 'proforma' ? 'EST'
+                   : tpl.invoiceType === 'credit-note' ? 'CN'
+                   : tpl.invoiceType === 'bill-of-supply' ? 'BOS'
+                   : tpl.invoiceType === 'composition' ? 'COMP'
+                   : tpl.invoiceType === 'delivery-challan' ? 'DC'
+                   : 'INV');
+      const invoiceNumber = nextInvoiceNumber(prefix);
+      const invoiceDate = today;
+
+      const client = {
+        name: tpl.clientName,
+        state: tpl.clientState,
+        gstin: tpl.clientGstin,
+        isSEZ: !!tpl.isSEZ,
+      };
+      const details = { placeOfSupply: tpl.placeOfSupply };
+      const invoiceOptions = tpl.invoiceOptions || {};
+      const totals = computeInvoiceTotals({
+        items: tpl.items || [],
+        profile,
+        client,
+        details,
+        showGST: invoiceOptions.showGST !== false,
+        taxInclusive: !!tpl.taxInclusive,
+        invoiceOptions,
+      });
+      const totalAmount = totals.total;
+      const taxTotal = totals.totalTaxAmount;
+
+      const bill = {
+        id: invoiceNumber,
+        clientName: tpl.clientName,
+        invoiceNumber,
+        invoiceDate,
+        invoiceType: tpl.invoiceType || 'tax-invoice',
+        currency: (tpl.invoiceOptions && tpl.invoiceOptions.currency) || 'INR',
+        totalAmount,
+        totalTaxAmount: taxTotal,
+        status: 'unpaid',
+        paidAmount: 0,
+        payments: [],
+        generatedFrom: tpl.id,
+        autoGenerated: true,
+        autoGeneratedAt: new Date().toISOString(),
+        data: {
+          profile,
+          client: {
+            name: tpl.clientName,
+            state: tpl.clientState,
+            gstin: tpl.clientGstin,
+            address: tpl.clientAddress,
+            country: tpl.clientCountry,
+            city: tpl.clientCity,
+            pin: tpl.clientPin,
+            email: tpl.clientEmail,
+            phone: tpl.clientPhone,
+            isSEZ: tpl.isSEZ,
+          },
+          details: { invoiceNumber, invoiceDate, dueDate: '', placeOfSupply: '' },
+          items: (tpl.items || []).map((i: any) => ({
+            ...i,
+            name: i.name || i.description || '',
+          })),
+          totals,
+          invoiceType: tpl.invoiceType || 'tax-invoice',
+          customTerms: tpl.customTerms || '',
+          customNotes: tpl.customNotes || '',
+          extraSections: tpl.extraSections || [],
+          invoiceOptions: tpl.invoiceOptions || {},
+          taxInclusive: !!tpl.taxInclusive,
+        },
+      };
+
+      billsCollection.save(bill);
+
+      // Advance the template
+      tpl.nextDate = advanceDate(tpl.nextDate, tpl.frequency, tpl.interval);
+      tpl.lastGenerated = today;
+      tpl.occurrencesCreated = (tpl.occurrencesCreated || 0) + 1;
+      recurringCollection.save(tpl);
+
+      fired += 1;
+    } catch (err: any) {
+      logErrorToFile('recurring', err);
+    }
+  }
+
+  if (fired > 0) {
+    console.log(`  Auto-generated ${fired} recurring invoice${fired !== 1 ? 's' : ''}.`);
+    // Surface the count so the frontend notification centre can pick it up.
+    const meta = (metaStorage.get({}) || {}) as Record<string, any>;
+    meta.lastRecurringAutoFire = { date: today, count: fired, at: new Date().toISOString() };
+    metaStorage.set(meta);
+  }
+
+  return fired;
+}
+
+let recurringIntervalId: any = null;
+let recurringTimeoutId: any = null;
+
+export interface RecurringEngineOptions {
+  initialDelayMs?: number;
+  intervalMs?: number;
+}
+
+/**
+ * Starts the recurring invoice background scheduler.
+ */
+export function startRecurringEngine(options: RecurringEngineOptions = {}): void {
+  const initialDelay = options.initialDelayMs ?? 3000;
+  const interval = options.intervalMs ?? 24 * 60 * 60 * 1000;
+
+  stopRecurringEngine();
+
+  recurringTimeoutId = setTimeout(() => {
+    processDueRecurring().catch((err: any) => logErrorToFile('recurring', err));
+  }, initialDelay);
+  if (recurringTimeoutId && typeof recurringTimeoutId.unref === 'function') {
+    recurringTimeoutId.unref();
+  }
+
+  recurringIntervalId = setInterval(() => {
+    processDueRecurring().catch((err: any) => logErrorToFile('recurring', err));
+  }, interval);
+  if (recurringIntervalId && typeof recurringIntervalId.unref === 'function') {
+    recurringIntervalId.unref();
+  }
+}
+
+/**
+ * Stops the recurring engine scheduler.
+ */
+export function stopRecurringEngine(): void {
+  if (recurringTimeoutId) {
+    clearTimeout(recurringTimeoutId);
+    recurringTimeoutId = null;
+  }
+  if (recurringIntervalId) {
+    clearInterval(recurringIntervalId);
+    recurringIntervalId = null;
+  }
+}

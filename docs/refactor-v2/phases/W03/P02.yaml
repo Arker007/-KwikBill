@@ -1,0 +1,38 @@
+id: "W03-P02"
+title: "Organization & Identity backend modules"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Migrate business profiles and identity management into apps/api/src/modules/organization and identity."
+scope: "Backend profiles controller, service, and repository porting with multi-profile and primary profile routing."
+files_read:
+  - "server/modules/profiles/profiles.controller.js"
+  - "server/modules/profiles/profiles.service.js"
+  - "server/modules/profiles/profiles.repository.js"
+  - "server/modules/profiles/profiles.routes.js"
+files_create:
+  - "apps/api/src/modules/organization/organization.controller.ts"
+  - "apps/api/src/modules/organization/organization.service.ts"
+  - "apps/api/src/modules/organization/organization.repository.ts"
+  - "apps/api/src/modules/organization/organization.routes.ts"
+  - "apps/api/src/modules/organization/index.ts"
+  - "apps/api/src/modules/identity/index.ts"
+actions:
+  - "Implement OrganizationRepository handling both SQLite profiles table and legacy profiles directory."
+  - "Port profile validation, default profile fallbacks, and multi-business switching logic to organization.service.ts."
+  - "Expose GET /api/profiles, GET /api/profile, POST /api/profiles, and DELETE /api/profiles in organization.routes.ts."
+  - "Mount organization router in apps/api app bootstrap and maintain re-export in server/modules/profiles/."
+preserve:
+  - "Preserve legacy single-file profile.json fallback for backward compatibility."
+acceptance:
+  - "GET /api/profiles and GET /api/profile return 200 with valid profile object."
+  - "Multi-profile CRUD operations function seamlessly."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert server/modules/profiles/ re-exports and restore original profiles files."
+risks:
+  - "Loss of default business profile or GSTIN address mapping."
+context_refs:
+  - "server/modules/profiles/profiles.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

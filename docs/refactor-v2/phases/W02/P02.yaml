@@ -1,0 +1,42 @@
+id: "W02-P02"
+title: "Shared UI component library foundation (packages/ui)"
+status: "completed"
+depends_on:
+  - "W01-P02"
+objective: "Migrate shared UI primitives, feedback modals, and design tokens into packages/ui."
+scope: "Establishing packages/ui with Button, Input, Modal, Table, Card, Badge, Toast, and design tokens."
+files_read:
+  - "src/shared/components/ui/Button.tsx"
+  - "src/shared/components/ui/Input.tsx"
+  - "src/shared/components/ui/Modal.tsx"
+  - "src/shared/components/ui/Card.tsx"
+files_create:
+  - "packages/ui/package.json"
+  - "packages/ui/tsconfig.json"
+  - "packages/ui/src/index.ts"
+  - "packages/ui/src/primitives/Button.tsx"
+  - "packages/ui/src/primitives/Input.tsx"
+  - "packages/ui/src/primitives/Modal.tsx"
+  - "packages/ui/src/primitives/Card.tsx"
+  - "packages/ui/src/feedback/Toast.tsx"
+actions:
+  - "Create packages/ui/package.json with name '@free-gst/ui'."
+  - "Port pure presentational components from src/shared/components/ui/ to packages/ui/src/primitives/."
+  - "Port Toast and ConfirmModal from src/shared/components/feedback/ to packages/ui/src/feedback/."
+  - "Export all components from packages/ui/src/index.ts."
+  - "Update src/shared/components/ui/ and feedback/ files to re-export from @free-gst/ui."
+preserve:
+  - "Preserve Lucide React icon imports and Tailwind utility classes without custom CSS."
+acceptance:
+  - "All UI components render without stylesheet breakage in existing views."
+  - "npm run build succeeds."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert facade re-exports in src/shared/components/ and delete packages/ui/."
+risks:
+  - "Tailwind class purging if preset content paths omit packages/ui."
+context_refs:
+  - "src/shared/components/ui/index.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

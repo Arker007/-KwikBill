@@ -1,0 +1,42 @@
+id: "W04-P12"
+title: "Integrations, Data Management & Help frontend domains"
+status: "completed"
+depends_on:
+  - "W04-P01"
+objective: "Migrate cloud sync, data backup controls, and user guides into apps/web/src/domains/integrations, data-management, and help."
+scope: "Frontend domain modules for Supabase sync hub, local JSON backup/restore, and interactive documentation."
+files_read:
+  - "src/pages/SupabasePage.tsx"
+  - "src/pages/ControlPanelPage.tsx"
+  - "src/pages/UserGuidePage.tsx"
+  - "src/features/settings/components/DataBackupTab.tsx"
+files_create:
+  - "apps/web/src/domains/integrations/pages/IntegrationsPage.tsx"
+  - "apps/web/src/domains/integrations/supabase/components/SupabaseSyncView.tsx"
+  - "apps/web/src/domains/integrations/index.ts"
+  - "apps/web/src/domains/data-management/pages/DataManagementPage.tsx"
+  - "apps/web/src/domains/data-management/components/BackupRestoreView.tsx"
+  - "apps/web/src/domains/data-management/index.ts"
+  - "apps/web/src/domains/help/pages/UserGuidePage.tsx"
+  - "apps/web/src/domains/help/index.ts"
+actions:
+  - "Port Supabase sync hub into apps/web/src/domains/integrations/."
+  - "Port DataBackupTab and ControlPanel into apps/web/src/domains/data-management/."
+  - "Port UserGuidePage and interactive help into apps/web/src/domains/help/."
+  - "Maintain re-exports in src/pages/ for backward compatibility."
+preserve:
+  - "Preserve 1-click JSON backup export and restore mechanisms."
+acceptance:
+  - "Integrations, backup controls, and user guide views render cleanly."
+  - "Smoke tests 17-23 pass."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/pages/ original files."
+risks:
+  - "Accidental execution of destructive restore during data-management tests."
+context_refs:
+  - "src/pages/SupabasePage.tsx"
+  - "src/pages/ControlPanelPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

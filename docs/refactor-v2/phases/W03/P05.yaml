@@ -1,0 +1,47 @@
+id: "W03-P05"
+title: "Invoicing & Counters backend module"
+status: "completed"
+depends_on:
+  - "W03-P03"
+  - "W03-P04"
+objective: "Migrate bills and invoice numbering counters into apps/api/src/modules/invoicing."
+scope: "Backend bills controller, service, repository, invoice number sequence generator, and meta settings."
+files_read:
+  - "server/modules/bills/bills.controller.js"
+  - "server/modules/bills/bills.service.js"
+  - "server/modules/bills/bills.repository.js"
+  - "server/modules/bills/bills.routes.js"
+  - "server/modules/meta/meta.controller.js"
+  - "server/modules/meta/meta.service.js"
+files_create:
+  - "apps/api/src/modules/invoicing/invoicing.controller.ts"
+  - "apps/api/src/modules/invoicing/invoicing.service.ts"
+  - "apps/api/src/modules/invoicing/invoicing.repository.ts"
+  - "apps/api/src/modules/invoicing/invoicing.routes.ts"
+  - "apps/api/src/modules/invoicing/counters/sequenceGenerator.ts"
+  - "apps/api/src/modules/invoicing/counters/counters.repository.ts"
+  - "apps/api/src/modules/invoicing/index.ts"
+actions:
+  - "Port bills repository to invoicing.repository.ts using SqliteCollectionRepository('bills')."
+  - "Port atomic invoice sequence numbering logic into sequenceGenerator.ts."
+  - "Expose GET /api/bills, POST /api/bills, DELETE /api/bills, and POST /api/bills/:id/duplicate."
+  - "Bridge meta counters endpoint POST /api/meta/:key/increment to update both JSON and SQLite counters table."
+  - "Re-export invoicing and meta modules from server/modules/bills/ and server/modules/meta/."
+preserve:
+  - "Preserve slash-encoded invoice ID support (e.g., INV/2026-27/0001)."
+  - "Preserve duplicate invoice number rejection (HTTP 409 Conflict)."
+acceptance:
+  - "GET /api/bills returns 200 with bills list."
+  - "POST /api/bills with slash ID succeeds with 200/201."
+  - "Smoke test subtests 2, 12, 13, and 15 pass without failure."
+verify:
+  - "node tests/smoke.mjs"
+  - "node scripts/tax-test.mjs"
+rollback:
+  - "Revert server/modules/bills/ re-exports and restore original bills files."
+risks:
+  - "Race conditions during concurrent invoice number generation."
+context_refs:
+  - "server/modules/bills/bills.routes.js"
+  - "server/modules/meta/meta.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

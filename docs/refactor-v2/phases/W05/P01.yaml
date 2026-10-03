@@ -1,0 +1,51 @@
+id: "W05-P01"
+title: "Statutory GST calculation package extraction (packages/financial-core)"
+status: "pending"
+depends_on:
+  - "W00-P01"
+  - "W02-P01"
+objective: "Quarantine and package pure statutory GST tax math, discount modes, rounding, and GSTIN validation into packages/financial-core."
+scope: "Creation of packages/financial-core with verbatim statutory tax algorithms, Modulo-36 check digits, and currency formatters."
+files_read:
+  - "src/features/invoices/utils/taxCalculation.ts"
+  - "src/shared/constants/indianStates.ts"
+  - "src/shared/constants/taxRates.ts"
+  - "src/shared/utils/formatters.ts"
+  - "src/shared/utils/validators.ts"
+files_create:
+  - "packages/financial-core/package.json"
+  - "packages/financial-core/tsconfig.json"
+  - "packages/financial-core/src/index.ts"
+  - "packages/financial-core/src/tax/taxCalculation.ts"
+  - "packages/financial-core/src/constants/indianStates.ts"
+  - "packages/financial-core/src/constants/taxRates.ts"
+  - "packages/financial-core/src/formatters/currencyFormatters.ts"
+  - "packages/financial-core/src/validators/gstinValidators.ts"
+  - "packages/financial-core/tests/tax.test.mjs"
+  - "packages/financial-core/tests/discount.test.mjs"
+actions:
+  - "Create packages/financial-core/package.json with name '@free-gst/financial-core'."
+  - "Transfer taxCalculation.ts verbatim into packages/financial-core/src/tax/taxCalculation.ts."
+  - "Transfer indianStates.ts and taxRates.ts into packages/financial-core/src/constants/."
+  - "Transfer formatters.ts and validators.ts into formatters/ and validators/."
+  - "Copy scripts/tax-test.mjs and discount-modes-test.mjs to packages/financial-core/tests/ configured to test the package."
+  - "Re-export all functions from src/features/invoices/utils/taxCalculation.ts and src/shared/utils/ pointing to @free-gst/financial-core."
+preserve:
+  - "NEVER alter statutory tax math formulas (Rule 1 Non-negotiable)."
+  - "Preserve exact 70/70 and 9/9 test expectations."
+acceptance:
+  - "node packages/financial-core/tests/tax.test.mjs passes 70/70 with 0 errors."
+  - "node packages/financial-core/tests/discount.test.mjs passes 9/9 with 0 errors."
+  - "Original test scripts pass 100% via facade."
+verify:
+  - "node packages/financial-core/tests/tax.test.mjs"
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+rollback:
+  - "Restore original src/features/invoices/utils/taxCalculation.ts and delete packages/financial-core/."
+risks:
+  - "Subtle rounding discrepancies if integer conversion differs by 1 paisa."
+context_refs:
+  - "src/features/invoices/utils/taxCalculation.ts"
+  - "RULES.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

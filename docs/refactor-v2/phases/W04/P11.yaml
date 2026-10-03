@@ -1,0 +1,40 @@
+id: "W04-P11"
+title: "Documents & Document Renderer package"
+status: "completed"
+depends_on:
+  - "W04-P05"
+objective: "Extract packages/document-renderer and migrate templates into apps/web/src/domains/documents."
+scope: "PDF rendering, thermal 80mm POS receipt generator, print stylesheets, and terms templates."
+files_read:
+  - "src/features/invoices/services/pdfService.ts"
+  - "src/features/invoices/components/InvoicePreview/InvoicePreview.tsx"
+  - "src/features/settings/components/TermsTemplatesTab.tsx"
+files_create:
+  - "packages/document-renderer/package.json"
+  - "packages/document-renderer/tsconfig.json"
+  - "packages/document-renderer/src/index.ts"
+  - "packages/document-renderer/src/pdfService.ts"
+  - "packages/document-renderer/src/thermalReceipt.ts"
+  - "apps/web/src/domains/documents/components/TermsTemplatesView.tsx"
+  - "apps/web/src/domains/documents/components/PrintConfigView.tsx"
+  - "apps/web/src/domains/documents/index.ts"
+actions:
+  - "Create packages/document-renderer/package.json with name '@free-gst/document-renderer'."
+  - "Port pdfService.ts and thermal receipt formatting into packages/document-renderer/src/."
+  - "Port TermsTemplatesTab and print configuration views into apps/web/src/domains/documents/."
+  - "Re-export pdfService from src/features/invoices/services/ to ensure zero build disruption."
+preserve:
+  - "Preserve html2canvas and jsPDF invoice layout fidelity, font scaling, and multi-page splits."
+acceptance:
+  - "packages/document-renderer builds cleanly."
+  - "Invoice preview and PDF generation execute without styling regressions."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore pdfService.ts in src/features/invoices/services/ and delete packages/document-renderer/."
+risks:
+  - "Canvas pixel scaling issues on high-DPI displays during PDF export."
+context_refs:
+  - "src/features/invoices/services/pdfService.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

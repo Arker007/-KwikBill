@@ -1,0 +1,33 @@
+id: "W05-P02"
+title: "Statutory Income Tax calculation package extraction"
+status: "pending"
+depends_on:
+  - "W05-P01"
+objective: "Quarantine Budget 2025 income tax, 87A rebate, capital gains, presumptive taxation, and 234 interest math into packages/financial-core."
+scope: "Porting itrCalculation.ts and statutory slab models into packages/financial-core/src/income-tax/."
+files_read:
+  - "src/features/income-tax/utils/itrCalculation.ts"
+  - "src/utils/itr.js"
+files_create:
+  - "packages/financial-core/src/income-tax/itrCalculation.ts"
+  - "packages/financial-core/src/income-tax/slabs.ts"
+  - "packages/financial-core/src/income-tax/index.ts"
+actions:
+  - "Port itrCalculation.ts verbatim into packages/financial-core/src/income-tax/itrCalculation.ts."
+  - "Export Income Tax calculators and constants via packages/financial-core/src/index.ts."
+  - "Re-export from src/features/income-tax/utils/itrCalculation.ts and src/utils/itr.js for backward compatibility."
+preserve:
+  - "Preserve Finance No. 2 Act 2024 capital gains rates (STCG 20%, LTCG 12.5%, exempt ₹1.25L)."
+  - "Preserve 15% surcharge cap on 111A/112A and Rule 119A ₹100 rounding on 234B/C interest."
+acceptance:
+  - "All tax tests in tax-test.mjs covering ITR (V31-C1 through V31-M3) continue passing 100%."
+  - "Zero regression in tax calculations."
+verify:
+  - "node scripts/tax-test.mjs"
+rollback:
+  - "Restore original files in src/features/income-tax/utils/."
+risks:
+  - "Tax slab boundary misclassification between old and new regimes."
+context_refs:
+  - "src/features/income-tax/utils/itrCalculation.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

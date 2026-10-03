@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Customers | Swipe</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            swipe: {
+              blue: '#1665D8',
+              'blue-hover': '#1254B7',
+              bg: '#F8FAFC',
+              sidebar: '#FFFFFF',
+              dark: '#1E293B',
+              border: '#E2E8F0',
+              muted: '#64748B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-[#F9FAFB] text-[#1E293B] antialiased flex flex-col min-h-screen font-sans text-[13px]">
+<!-- BEGIN: TopHeader -->
+<header class="h-14 bg-white border-b border-slate-200 sticky top-0 z-30 flex items-center justify-between px-4 select-none">
+<!-- Brand & Company Switcher -->
+<div class="flex items-center space-x-6">
+<!-- Swipe Logo -->
+<div class="flex items-center space-x-2">
+<svg class="w-8 h-8 text-[#1665D8]" fill="none" viewbox="0 0 32 32">
+<circle cx="16" cy="16" r="14" stroke="#1665D8" stroke-width="3"></circle>
+<path d="M10 20C12 14 16 10 22 12C20 18 16 22 10 20Z" fill="#1665D8"></path>
+</svg>
+<span class="text-2xl font-black tracking-tight text-[#0F172A] lowercase">swipe</span>
+</div>
+<!-- Divider -->
+<div class="h-6 w-px bg-slate-200"></div>
+<!-- Current Company Selector -->
+<div class="flex items-center space-x-2.5 cursor-pointer">
+<div class="w-7 h-7 rounded border border-emerald-500 bg-white flex items-center justify-center font-bold text-xs text-emerald-700 tracking-tight shadow-sm">
+          VE
+        </div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-1">
+<span class="font-semibold text-xs text-slate-800 tracking-tight">Vishal Enterprise</span>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-[10px] text-blue-600 hover:underline font-medium leading-none mt-0.5">+ Add Another Company</span>
+</div>
+</div>
+</div>
+<!-- Center/Right Search Bar & Utilities -->
+<div class="flex items-center space-x-4">
+<!-- Search Pill -->
+<div class="relative w-[340px]">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-9 pr-14 py-1.5 bg-[#F8FAFC] border border-slate-200 rounded-md text-xs placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition-all" placeholder="Ask SwipeAI" type="text"/>
+<div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+<span class="text-[10px] font-medium text-slate-400 border border-slate-200 bg-white px-1.5 py-0.5 rounded shadow-2xs">ctrl+k</span>
+</div>
+</div>
+<!-- Action Icons -->
+<div class="flex items-center space-x-3 text-slate-500">
+<!-- Quick Action / Lightning -->
+<button class="p-1.5 hover:bg-slate-100 rounded-full transition-colors" title="Quick Actions">
+<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Notifications -->
+<button class="p-1.5 hover:bg-slate-100 rounded-full relative transition-colors" title="Notifications">
+<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+</button>
+<!-- Announcements / Updates -->
+<button class="p-1.5 hover:bg-slate-100 rounded-full transition-colors" title="Announcements">
+<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- User Profile Avatar -->
+<div class="w-7 h-7 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center cursor-pointer text-slate-600 hover:ring-2 hover:ring-blue-500">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+</svg>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- Container for Sidebar and Main Page -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: Sidebar -->
+<aside class="w-56 bg-white border-r border-slate-200 flex flex-col justify-between flex-shrink-0 select-none overflow-y-auto">
+<nav class="py-2.5 px-2 space-y-0.5">
+<!-- Sales -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Sales</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Purchases -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Purchases</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Quotations+ -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Quotations+</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Expenses+ -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Expenses+</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- SwipeAI -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>SwipeAI</span>
+</div>
+</a>
+<!-- Products & Services -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Products &amp; Services</span>
+</div>
+</a>
+<!-- Inventory -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Inventory</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Payments -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<span class="text-xs font-semibold text-slate-500 w-4 text-center">₹</span>
+<span>Payments</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<!-- Customers (Active) -->
+<a class="flex items-center px-3 py-1.5 bg-[#EFF6FF] text-[#1665D8] rounded-md font-medium text-xs" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-[#1665D8]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Customers</span>
+</div>
+</a>
+<!-- Vendors -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Vendors</span>
+</div>
+</a>
+<!-- Projects -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Projects</span>
+</div>
+</a>
+<!-- Insights -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Insights</span>
+</div>
+</a>
+<!-- Reports -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Reports</span>
+</div>
+</a>
+<!-- OnlineStore -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>OnlineStore</span>
+</div>
+</a>
+<!-- E-way Bills -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>E-way Bills</span>
+</div>
+</a>
+<!-- Integrations -->
+<a class="flex items-center px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Integrations</span>
+</div>
+</a>
+<!-- More -->
+<a class="flex items-center justify-between px-3 py-1.5 text-slate-600 hover:bg-slate-50 rounded-md font-normal text-xs group" href="#">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>More</span>
+</div>
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</nav>
+<!-- Bottom Sidebar Elements -->
+<div class="p-3 border-t border-slate-200 space-y-2">
+<a class="flex items-center space-x-2 text-xs text-slate-600 hover:text-slate-900 px-2 py-1 rounded" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Invite Users</span>
+</a>
+<a class="flex items-center space-x-2 text-xs text-slate-600 hover:text-slate-900 px-2 py-1 rounded" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Settings</span>
+</a>
+<!-- Refer Banner Card -->
+<div class="bg-[#EFF6FF] border border-blue-100 rounded-lg p-3 text-center">
+<p class="text-xs font-semibold text-slate-800 leading-tight">Refer a friend &amp; Get<br/>₹2000 🎁</p>
+<button class="mt-2.5 w-full bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold py-1.5 px-3 rounded shadow-xs border border-slate-200 flex items-center justify-center space-x-1 transition-colors">
+<span>Refer Now</span>
+<span>🪄</span>
+</button>
+</div>
+<!-- Collapse Sidebar Arrow -->
+<div class="pt-2 flex items-center justify-start text-slate-400 hover:text-slate-600 cursor-pointer">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M11 19l-7-7 7-7m8 14l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-y-auto px-6 py-4 flex flex-col justify-between space-y-4">
+<div class="space-y-4">
+<!-- Top Title & Tabs Area -->
+<section data-purpose="page-title-and-tabs">
+<div class="flex items-center space-x-2">
+<h1 class="text-lg font-bold text-slate-900 tracking-tight">Customers</h1>
+<!-- Video tutorial play button -->
+<button class="w-5 h-5 rounded-full bg-pink-600 hover:bg-pink-700 flex items-center justify-center text-white shadow-sm transition-colors" title="Watch tutorial">
+<svg class="w-2.5 h-2.5 fill-current ml-0.5" viewbox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+</button>
+</div>
+<!-- Customer Filter Tabs -->
+<div class="flex items-center space-x-6 border-b border-slate-200 mt-2 text-xs font-medium">
+<div class="flex items-center space-x-1.5 pb-2 text-slate-900 border-b-2 border-slate-900 cursor-pointer">
+<span>All Customers</span>
+<span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[11px] font-semibold">31</span>
+</div>
+<div class="pb-2 text-slate-500 hover:text-slate-800 cursor-pointer transition-colors">
+<span>Groups</span>
+</div>
+<div class="pb-2 text-slate-500 hover:text-slate-800 cursor-pointer transition-colors">
+<span>Deleted</span>
+</div>
+</div>
+</section>
+<!-- Search Bar and Action Buttons -->
+<section class="flex items-center justify-between gap-4" data-purpose="actions-bar">
+<div class="relative flex-1 max-w-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded text-xs placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" placeholder="Search customers by name, company, phone etc.." type="text"/>
+</div>
+<div class="flex items-center space-x-2">
+<!-- Actions Dropdown -->
+<button class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium px-3 py-1.5 rounded flex items-center space-x-1.5 text-xs transition-colors shadow-2xs">
+<span>Actions</span>
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- New Customer Button -->
+<button class="bg-[#1665D8] hover:bg-[#1254B7] text-white font-medium px-3.5 py-1.5 rounded flex items-center space-x-1.5 text-xs transition-colors shadow-xs">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+<span>New Customer</span>
+</button>
+</div>
+</section>
+<!-- Customer Data Table -->
+<section class="bg-white border border-slate-200 rounded shadow-xs overflow-hidden" data-purpose="customers-table">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[11px] font-semibold text-slate-500 border-b border-slate-200 bg-white">
+<th class="py-2.5 px-4 w-[36%] font-medium">
+<div class="flex items-center space-x-1">
+<span>Name</span>
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</th>
+<th class="py-2.5 px-4 w-[24%] font-medium">Contact Info</th>
+<th class="py-2.5 px-4 w-[14%] font-medium">
+<div class="flex items-center space-x-1">
+<span>Closing Balance</span>
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</th>
+<th class="py-2.5 px-4 w-[16%] font-medium">Notes</th>
+<th class="py-2.5 px-4 w-[10%] text-right font-medium"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-xs">
+<!-- Row 1: VARSHA ENGINEERS -->
+<tr class="hover:bg-slate-50 transition-colors group">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fed7aa] text-[#9a3412] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">VE</div>
+<span class="font-semibold text-slate-800">VARSHA ENGINEERS</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 14 hours ago</td>
+<td class="py-2.5 px-4 text-right">
+<div class="inline-flex items-center space-x-1.5">
+<button class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-2 py-1 rounded text-[11px] font-medium flex items-center space-x-1 transition-colors shadow-2xs">
+<svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Ledger</span>
+</button>
+<button class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-2 py-1 rounded text-[11px] font-medium flex items-center space-x-1 transition-colors shadow-2xs">
+<svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Edit</span>
+</button>
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: VEER PHARMACHEM -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fde68a] text-[#854d0e] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">VP</div>
+<span class="font-semibold text-slate-800">VEER PHARMACHEM</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 06 Sep 26, 11:28 AM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 3: Utsav F Pntc Clt -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fed7aa] text-[#c2410c] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">UF</div>
+<span class="font-semibold text-slate-800">Utsav F Pntc Clt</span>
+</div>
+</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-1.5 text-slate-700">
+<span>8401217494</span>
+<svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+</div>
+</td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 06 Aug 26, 01:15 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 4: RECOSOLUTION LLP -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#ccfbf1] text-[#0f766e] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">RL</div>
+<div>
+<div class="font-semibold text-slate-800">RECOSOLUTION LLP</div>
+<div class="text-[11px] text-slate-400 leading-tight">Recosolution LLP</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 08 Apr 26, 01:43 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 5: M/ S SURESH KUMAR -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#e0f2fe] text-[#0369a1] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">MS</div>
+<span class="font-semibold text-slate-800">M/ S SURESH KUMAR</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 19 Mar 26, 12:39 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 6: Centre for Environment Education -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#dcfce7] text-[#15803d] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">CF</div>
+<span class="font-semibold text-slate-800">Centre for Environment Education</span>
+</div>
+</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-1.5 text-slate-700">
+<span>9898572039</span>
+<svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+</div>
+</td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 18 Mar 26, 11:16 AM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 7: NEHRU FOUNDATION FOR DEVELOPMENT -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#d1fae5] text-[#065f46] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">NF</div>
+<span class="font-semibold text-slate-800 line-clamp-1">NEHRU FOUNDATION FOR DEVELOPMENT CENTRE FOR ENVIRONMENT EDUCATION SOCIETY</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 31 Dec 25, 04:56 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 8: Deependra Kamle -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#ffe4e6] text-[#be123c] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">DK</div>
+<span class="font-semibold text-slate-800">Deependra Kamle</span>
+</div>
+</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-1.5 text-slate-700">
+<span>9425112110</span>
+<svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+</div>
+</td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 08 Aug 25, 10:34 AM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 9: Anandhu Ajeeve -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#e0f2fe] text-[#0284c7] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">AA</div>
+<span class="font-semibold text-slate-800">Anandhu Ajeeve</span>
+</div>
+</td>
+<td class="py-2.5 px-4">
+<div class="flex flex-col">
+<div class="flex items-center space-x-1.5 text-slate-700">
+<span>7736601811</span>
+<svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+</div>
+<span class="text-[11px] text-slate-400">anandhuajeeve7@gmail.com</span>
+</div>
+</td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 22 May 25, 01:49 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 10: Banas Battery -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fce7f3] text-[#db2777] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">BB</div>
+<span class="font-semibold text-slate-800">Banas Battery</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 14 May 25, 02:53 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 11: ABHA ENGINEERS -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fee2e2] text-[#dc2626] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">AE</div>
+<span class="font-semibold text-slate-800">ABHA ENGINEERS</span>
+</div>
+</td>
+<td class="py-2.5 px-4 text-slate-500"></td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 12 Apr 25, 09:07 AM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+<!-- Row 12: GLOBAL ALUMINIUM PVT LTD -->
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-3">
+<div class="w-7 h-7 rounded-full bg-[#fef3c7] text-[#d97706] font-semibold text-[11px] flex items-center justify-center flex-shrink-0">GA</div>
+<div>
+<div class="font-semibold text-slate-800">GLOBAL ALUMINIUM PVT LTD</div>
+<div class="text-[11px] text-slate-400 leading-tight">Global Aluminium</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-4">
+<div class="flex items-center space-x-1.5 text-slate-700">
+<span>9347135274</span>
+<svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewbox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path></svg>
+</div>
+</td>
+<td class="py-2.5 px-4 font-normal text-slate-800">₹ 0.00</td>
+<td class="py-2.5 px-4 text-[11px] text-slate-400">Created: 07 Apr 25, 12:57 PM</td>
+<td class="py-2.5 px-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 px-1">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Summary Totals Bar & Pagination -->
+<section class="flex items-center justify-between py-1" data-purpose="totals-and-pagination">
+<!-- Total Balance Badges -->
+<div class="flex items-center space-x-2">
+<div class="bg-[#FFF1F2] border border-[#FFE4E6] text-slate-700 px-3 py-1 rounded text-xs flex items-center space-x-1.5 shadow-2xs">
+<span class="text-slate-600">You Pay</span>
+<span class="font-semibold text-slate-900">₹ 0.00</span>
+</div>
+<div class="bg-[#FFF1F2] border border-[#FFE4E6] text-slate-700 px-3 py-1 rounded text-xs flex items-center space-x-1.5 shadow-2xs">
+<span class="text-slate-600">You Collect</span>
+<span class="font-semibold text-slate-900">₹ 0.00</span>
+</div>
+</div>
+<!-- Pagination Controls -->
+<div class="flex items-center space-x-3 text-xs text-slate-600 bg-white px-2 py-1 rounded border border-slate-200">
+<span class="font-medium text-slate-700">1 / 3</span>
+<div class="flex items-center space-x-1">
+<button class="p-0.5 text-slate-400 hover:text-slate-700 disabled:opacity-40 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="p-0.5 text-slate-600 hover:text-slate-900 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<!-- Bottom Feature Callout: Customer/Vendor Import -->
+<section class="bg-[#EBF3FE] border border-[#D5E5FD] rounded-lg p-4 flex items-center justify-between shadow-xs" data-purpose="import-banner">
+<div>
+<h2 class="text-xs font-bold text-slate-900 tracking-tight">Customer/ Vendor Import</h2>
+<p class="text-[11px] text-slate-600 mt-0.5">Upload a list of new customers and vendors or update existing data easily.</p>
+<div class="flex items-center space-x-2 mt-2">
+<!-- Overlapping Avatar Avatars -->
+<div class="flex -space-x-1.5 overflow-hidden">
+<img alt="User 1" class="inline-block h-5 w-5 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVX3VbdocCYtYBFRmm2QhHSUGb0olX9fXEu5kWbcaVhzisRhORtDk7vMQj-maKJ4C2q7wJDpghYnE1oA5em-sBE-cH4gu8YVcMhCHafgjIV4Cv5DShKEFP5QL7HFWvFoV1acmNE-LJ6BvA9wSukwaQgCjczwQIXi31zz3wSfZawqyL0EUaTHH5e7SkGw6D2jUES5XDSgKXeXRvVN9cNDzWVU7YNarncKjs5Z8_61YfBs_58-f7mWgT"/>
+<img alt="User 2" class="inline-block h-5 w-5 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC87vDfPEFC0cWuZUVApx6ZgUQtmfzzV0vGZC7O8lsgrk1rQcplz6fygmFIMfrEsZ47H2MkRp-WOMLZQKwfr91HMNoBCMvRvhTc4LjaWk2e3_sYCqBLFMMUeCnOhnAf2qwOkGt079BZPKrSp-YVjBsnUaD0AqPAIFoTVV64aRcXxZSibznEh7ZMuRwBrBdXsXuh7n-VV2IIkncTpy1jnLVnGIgMVLE_InA7qeccXC58dIfILWOtyHkr"/>
+<img alt="User 3" class="inline-block h-5 w-5 rounded-full ring-2 ring-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtT543Ql_MrfXZaeXEtNmiCi9C9yEOFz9l1MBCWt1jsDre9gm7nqoVQFu2whc0U-Q1Z8rD1Wznx_FLvu7tcaOAD9T4GJ-suIrcKmN73gRFWp3Z1QkANcG2MNN9UpcS8CjThUtNxj0yYjwagBMmQ86NDfr8fgBWgbg7JIIIwCklcLnVPczMi0ymSvZsdjkGyiTFdjnPnW-oU0i1JBMBUJau4u95ZQn0grnjpFFZkVcNIzv9uE106av8"/>
+</div>
+<span class="text-[11px] text-slate-500">Aravind and lakhs of businesses use premium</span>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors">
+<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Talk to a specialist</span>
+</button>
+<button class="bg-[#F59E0B] hover:bg-[#D97706] text-slate-900 font-bold px-4 py-1.5 rounded text-xs flex items-center space-x-1 shadow transition-all">
+<span>Upgrade</span>
+<span>🚀</span>
+</button>
+</div>
+</section>
+</div>
+<!-- BEGIN: Footer -->
+<footer class="pt-4 pb-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 select-none">
+<div class="flex items-center space-x-3">
+<div class="flex items-center space-x-1.5">
+<svg class="w-5 h-5 text-[#1665D8]" fill="none" viewbox="0 0 32 32">
+<circle cx="16" cy="16" r="14" stroke="#1665D8" stroke-width="3"></circle>
+<path d="M10 20C12 14 16 10 22 12C20 18 16 22 10 20Z" fill="#1665D8"></path>
+</svg>
+<span class="text-base font-black tracking-tight text-[#0F172A] lowercase">swipe</span>
+</div>
+<span>©2026 NextSpeed Technologies Private Limited. All rights reserved.</span>
+<span class="flex items-center space-x-1 text-blue-600">
+<svg class="w-3 h-3 text-blue-600" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path></svg>
+<span>Data is secured via 'bank-grade' security</span>
+</span>
+</div>
+</footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- BEGIN: FloatingWhatsAppWidget -->
+<div class="fixed bottom-6 right-6 z-50">
+<a class="w-12 h-12 bg-[#25D366] hover:bg-[#20ba59] rounded-full shadow-lg flex items-center justify-center text-white transition-transform hover:scale-105" href="#" title="Chat on WhatsApp">
+<svg class="w-7 h-7 fill-current" viewbox="0 0 24 24">
+<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path>
+</svg>
+</a>
+</div>
+<!-- END: FloatingWhatsAppWidget -->
+</body></html>

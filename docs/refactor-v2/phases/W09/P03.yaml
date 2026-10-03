@@ -1,0 +1,39 @@
+id: "W09-P03"
+title: "Monorepo production build, parity verification, and documentation update"
+status: "completed"
+depends_on:
+  - "W09-P02"
+objective: "Perform final verification gates, compile production assets, update root documentation, and freeze Refactor V2 state."
+scope: "Final build verification, test suite execution, README and CHANGELOG synchronization, and STATE.json freeze."
+files_read:
+  - "docs/refactor-v2/STATE.json"
+  - "docs/refactor-v2/PHASES.yaml"
+files_change:
+  - "README.md"
+  - "CHANGELOG.md"
+  - "docs/refactor-v2/STATE.json"
+actions:
+  - "Run complete test suite: tax tests (70/70), discount modes (9/9), smoke tests (23/23), security tests, and parity tests."
+  - "Execute production build via npm run build and verify zero bundle errors."
+  - "Update README.md reflecting the new monorepo architecture and commands."
+  - "Update CHANGELOG.md logging Refactor V2 completion."
+  - "Update docs/refactor-v2/STATE.json marking all phases completed and recording final verification timestamp."
+preserve:
+  - "Preserve all statutory rules, zero-dependency local operation, and 0.0.0.0:3000 port binding."
+acceptance:
+  - "npm run build succeeds cleanly."
+  - "All verification suites pass 100%."
+  - "Documentation accurately reflects monorepo layout."
+verify:
+  - "npm run build"
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert documentation updates."
+risks:
+  - "Stale links in documentation."
+context_refs:
+  - "README.md"
+  - "CHANGELOG.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

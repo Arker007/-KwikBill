@@ -1,0 +1,326 @@
+version: "2.0.0"
+phases:
+  # W00: Baseline audit and safety checks
+  - id: "W00-P01"
+    title: "Baseline verification, test suite freeze, and data snapshot manifest"
+    file: "phases/W00/P01.yaml"
+    depends_on: []
+    scope: "Verification of 70/70 tax tests, 9/9 discount tests, smoke suite, and creating pre-refactor backup snapshot"
+    status: "completed"
+
+  # W01: Workspace and build infrastructure
+  - id: "W01-P01"
+    title: "Monorepo workspace configuration & base TypeScript setup"
+    file: "phases/W01/P01.yaml"
+    depends_on: ["W00-P01"]
+    scope: "Declare workspaces in package.json (apps/*, packages/*) and tsconfig.base.json"
+    status: "completed"
+
+  - id: "W01-P02"
+    title: "Shared build and packaging presets (packages/config)"
+    file: "phases/W01/P02.yaml"
+    depends_on: ["W01-P01"]
+    scope: "Establish shared compiler, linting, and Tailwind configurations in packages/config"
+    status: "completed"
+
+  - id: "W01-P03"
+    title: "App routing and proxy setup for web/api development server"
+    file: "phases/W01/P03.yaml"
+    depends_on: ["W01-P02"]
+    scope: "Configure apps/web Vite configuration and Express 0.0.0.0:3000 reverse proxy bridge"
+    status: "completed"
+
+  # W02: Shared contracts and reusable utilities
+  - id: "W02-P01"
+    title: "Common API Contracts package (packages/api-contracts)"
+    file: "phases/W02/P01.yaml"
+    depends_on: ["W01-P01"]
+    scope: "Consolidate DTOs, endpoint routes, query/body schemas, and shared TypeScript models"
+    status: "completed"
+
+  - id: "W02-P02"
+    title: "Shared UI component library foundation (packages/ui)"
+    file: "phases/W02/P02.yaml"
+    depends_on: ["W01-P02"]
+    scope: "Migrate shared UI primitives, feedback modals, and design tokens to packages/ui"
+    status: "completed"
+
+  - id: "W02-P03"
+    title: "Centralized API Client package (packages/api-client)"
+    file: "phases/W02/P03.yaml"
+    depends_on: ["W02-P01"]
+    scope: "Extract ApiClient HTTP wrapper, error unwrapping, and endpoint dictionaries"
+    status: "completed"
+
+  # W03: Backend domain separation
+  - id: "W03-P01"
+    title: "Backend app bootstrap and middleware infrastructure"
+    file: "phases/W03/P01.yaml"
+    depends_on: ["W01-P03", "W02-P01"]
+    scope: "Establish apps/api/src/bootstrap and apps/api/src/platform/middleware"
+    status: "completed"
+
+  - id: "W03-P02"
+    title: "Organization & Identity backend modules"
+    file: "phases/W03/P02.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Migrate server/modules/profiles into apps/api/src/modules/organization and identity"
+    status: "completed"
+
+  - id: "W03-P03"
+    title: "Customer Management backend module"
+    file: "phases/W03/P03.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Migrate server/modules/clients into apps/api/src/modules/customers"
+    status: "completed"
+
+  - id: "W03-P04"
+    title: "Catalog & Inventory backend modules"
+    file: "phases/W03/P04.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Migrate server/modules/products into apps/api/src/modules/catalog and inventory"
+    status: "completed"
+
+  - id: "W03-P05"
+    title: "Invoicing & Counters backend module"
+    file: "phases/W03/P05.yaml"
+    depends_on: ["W03-P03", "W03-P04"]
+    scope: "Migrate server/modules/bills and meta numbering into apps/api/src/modules/invoicing"
+    status: "completed"
+
+  - id: "W03-P06"
+    title: "Recurring Billing backend module"
+    file: "phases/W03/P06.yaml"
+    depends_on: ["W03-P05"]
+    scope: "Migrate server/modules/recurring into apps/api/src/modules/recurring-billing"
+    status: "completed"
+
+  - id: "W03-P07"
+    title: "Purchasing & Expenses backend modules"
+    file: "phases/W03/P07.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Migrate server/modules/purchases and expenses into apps/api/src/modules/purchasing and expenses"
+    status: "completed"
+
+  - id: "W03-P08"
+    title: "Payments & Allocations backend module"
+    file: "phases/W03/P08.yaml"
+    depends_on: ["W03-P05"]
+    scope: "Migrate server/modules/receipts into apps/api/src/modules/payments"
+    status: "completed"
+
+  - id: "W03-P09"
+    title: "Taxation & Reporting backend modules"
+    file: "phases/W03/P09.yaml"
+    depends_on: ["W03-P05", "W03-P07"]
+    scope: "Create tax summary endpoints and financial reporting aggregation services"
+    status: "completed"
+
+  - id: "W03-P10"
+    title: "Documents & Templates backend module"
+    file: "phases/W03/P10.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Migrate server/modules/templates into apps/api/src/modules/documents"
+    status: "completed"
+
+  # W04: Frontend domain separation
+  - id: "W04-P01"
+    title: "Frontend app shell, platform, and router structure"
+    file: "phases/W04/P01.yaml"
+    depends_on: ["W01-P03", "W02-P02"]
+    scope: "Establish apps/web/src/app and apps/web/src/platform with AppShell, router, and context providers"
+    status: "completed"
+
+  - id: "W04-P02"
+    title: "Identity & Organization frontend domains"
+    file: "phases/W04/P02.yaml"
+    depends_on: ["W04-P01", "W02-P03"]
+    scope: "Decompose SettingsPage into identity and organization domains"
+    status: "completed"
+
+  - id: "W04-P03"
+    title: "Customers frontend domain"
+    file: "phases/W04/P03.yaml"
+    depends_on: ["W04-P01", "W02-P03"]
+    scope: "Migrate src/features/clients and ClientsPage into apps/web/src/domains/customers"
+    status: "completed"
+
+  - id: "W04-P04"
+    title: "Catalog & Inventory frontend domains"
+    file: "phases/W04/P04.yaml"
+    depends_on: ["W04-P01", "W02-P03"]
+    scope: "Migrate src/features/inventory into apps/web/src/domains/catalog and inventory"
+    status: "completed"
+
+  - id: "W04-P05"
+    title: "Invoicing frontend domain"
+    file: "phases/W04/P05.yaml"
+    depends_on: ["W04-P03", "W04-P04"]
+    scope: "Migrate src/features/invoices, InvoiceEditorPage, and DashboardPage into invoicing domain"
+    status: "completed"
+
+  - id: "W04-P06"
+    title: "Recurring Billing frontend domain"
+    file: "phases/W04/P06.yaml"
+    depends_on: ["W04-P05"]
+    scope: "Migrate src/features/recurring and RecurringPage into recurring-billing domain"
+    status: "completed"
+
+  - id: "W04-P07"
+    title: "Purchasing & Expenses frontend domains"
+    file: "phases/W04/P07.yaml"
+    depends_on: ["W04-P01", "W02-P03"]
+    scope: "Migrate src/features/purchases and expenses into purchasing and expenses domains"
+    status: "completed"
+
+  - id: "W04-P08"
+    title: "Payments frontend domain"
+    file: "phases/W04/P08.yaml"
+    depends_on: ["W04-P05"]
+    scope: "Migrate src/features/receipts and ReceiptsPage into payments domain"
+    status: "completed"
+
+  - id: "W04-P09"
+    title: "Taxation frontend domain"
+    file: "phases/W04/P09.yaml"
+    depends_on: ["W04-P01", "W05-P01", "W05-P02"]
+    scope: "Migrate src/features/gst-returns and income-tax into taxation domain"
+    status: "completed"
+
+  - id: "W04-P10"
+    title: "Reporting frontend domain"
+    file: "phases/W04/P10.yaml"
+    depends_on: ["W04-P05", "W04-P07"]
+    scope: "Migrate src/features/reports and ReportsPage into reporting domain"
+    status: "completed"
+
+  - id: "W04-P11"
+    title: "Documents & Document Renderer package"
+    file: "phases/W04/P11.yaml"
+    depends_on: ["W04-P05"]
+    scope: "Extract packages/document-renderer and migrate templates into documents domain"
+    status: "completed"
+
+  - id: "W04-P12"
+    title: "Integrations, Data Management & Help frontend domains"
+    file: "phases/W04/P12.yaml"
+    depends_on: ["W04-P01"]
+    scope: "Migrate SupabasePage, ControlPanelPage, and UserGuidePage into integrations, data-management, and help"
+    status: "completed"
+
+  # W05: Financial calculation consolidation
+  - id: "W05-P01"
+    title: "Statutory GST calculation package extraction (packages/financial-core)"
+    file: "phases/W05/P01.yaml"
+    depends_on: ["W00-P01", "W02-P01"]
+    scope: "Quarantine pure statutory GST tax, discount, rounding, and gstin validation logic"
+    status: "completed"
+
+  - id: "W05-P02"
+    title: "Statutory Income Tax calculation package extraction"
+    file: "phases/W05/P02.yaml"
+    depends_on: ["W05-P01"]
+    scope: "Quarantine Budget 2025 income tax, 87A rebate, capital gains, presumptive, and 234 interest algorithms"
+    status: "completed"
+
+  - id: "W05-P03"
+    title: "Package integration with backend and frontend invoicing engines"
+    file: "phases/W05/P03.yaml"
+    depends_on: ["W05-P01", "W03-P05", "W04-P05"]
+    scope: "Wire packages/financial-core as authoritative calculation source for frontend and backend"
+    status: "completed"
+
+  # W06: Persistence and SQLite migration
+  - id: "W06-P01"
+    title: "Database migration scripts and schema layout (database/)"
+    file: "phases/W06/P01.yaml"
+    depends_on: ["W00-P01"]
+    scope: "Establish database/schema, database/migrations, and database/seeds"
+    status: "completed"
+
+  - id: "W06-P02"
+    title: "Backend persistence engine relocation to apps/api/src/infrastructure/persistence"
+    file: "phases/W06/P02.yaml"
+    depends_on: ["W03-P01", "W06-P01"]
+    scope: "Relocate SqliteCollectionRepository, JsonCollectionRepository, and sqlite.js adapter"
+    status: "completed"
+
+  - id: "W06-P03"
+    title: "SingleFileRepository & Meta counters reconciliation (Dual-write & SQLite parity)"
+    file: "phases/W06/P03.yaml"
+    depends_on: ["W06-P02"]
+    scope: "Bridge meta counters and app settings to write to SQLite app_settings and meta_counters tables"
+    status: "completed"
+
+  - id: "W06-P04"
+    title: "SQLite source-of-truth cutover & fallback switch verification"
+    file: "phases/W06/P04.yaml"
+    depends_on: ["W06-P03"]
+    scope: "Verify 100% parity across bills, clients, and meta; configure primary read/write routing to accounting.db"
+    status: "completed"
+
+  # W07: Background jobs and integrations
+  - id: "W07-P01"
+    title: "Scheduler infrastructure relocation (apps/api/src/infrastructure/scheduler)"
+    file: "phases/W07/P01.yaml"
+    depends_on: ["W03-P06"]
+    scope: "Relocate recurring billing engine and trash cleanup cron scheduler"
+    status: "completed"
+
+  - id: "W07-P02"
+    title: "Backup and snapshot infrastructure (apps/api/src/infrastructure/backups)"
+    file: "phases/W07/P02.yaml"
+    depends_on: ["W03-P01", "W06-P02"]
+    scope: "Relocate rolling backup engine and pre-sync snapshot generator"
+    status: "completed"
+
+  - id: "W07-P03"
+    title: "Supabase cloud sync infrastructure (apps/api/src/infrastructure/cloud-sync)"
+    file: "phases/W07/P03.yaml"
+    depends_on: ["W03-P01"]
+    scope: "Relocate Supabase transformers, sync service, and connection ping handler"
+    status: "completed"
+
+  # W08: Testing, security and quality gates
+  - id: "W08-P01"
+    title: "Test harness consolidation into tests/{contract,security,migration,e2e}"
+    file: "phases/W08/P01.yaml"
+    depends_on: ["W03-P10", "W04-P12"]
+    scope: "Consolidate and normalize smoke tests, contract tests, security tests, and parity scripts"
+    status: "completed"
+
+  - id: "W08-P02"
+    title: "Security gate verification: Path traversal & input sanitization"
+    file: "phases/W08/P02.yaml"
+    depends_on: ["W08-P01"]
+    scope: "Verify 100% path traversal rejection across all document ID parameters and file APIs"
+    status: "completed"
+
+  - id: "W08-P03"
+    title: "Comprehensive financial and discount parity regression audit"
+    file: "phases/W08/P03.yaml"
+    depends_on: ["W05-P03", "W06-P04", "W08-P01"]
+    scope: "Run full 70/70 tax test, 9/9 discount modes, and multi-currency edge case tests"
+    status: "completed"
+
+  # W09: Legacy cleanup and final verification
+  - id: "W09-P01"
+    title: "Legacy facade entry points decommissioning"
+    file: "phases/W09/P01.yaml"
+    depends_on: ["W08-P03"]
+    scope: "Decommission root facades in server.js and src/App.jsx once all imports resolve to monorepo targets"
+    status: "completed"
+
+  - id: "W09-P02"
+    title: "Legacy data directory archiving to data/legacy-json"
+    file: "phases/W09/P02.yaml"
+    depends_on: ["W09-P01", "W06-P04"]
+    scope: "Archive legacy data/ flat JSON files into data/legacy-json/ while retaining SQLite accounting.db primary"
+    status: "completed"
+
+  - id: "W09-P03"
+    title: "Monorepo production build, parity verification, and documentation update"
+    file: "phases/W09/P03.yaml"
+    depends_on: ["W09-P02"]
+    scope: "Final compile_applet, verify smoke suite, update README, and freeze refactor state"
+    status: "completed"

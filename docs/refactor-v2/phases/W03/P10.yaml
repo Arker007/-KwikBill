@@ -1,0 +1,37 @@
+id: "W03-P10"
+title: "Documents & Templates backend module"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Migrate document print templates and terms conditions into apps/api/src/modules/documents."
+scope: "Backend templates controller, service, repository, and custom print layout storage."
+files_read:
+  - "server/modules/templates/templates.controller.js"
+  - "server/modules/templates/templates.service.js"
+  - "server/modules/templates/templates.repository.js"
+  - "server/modules/templates/templates.routes.js"
+files_create:
+  - "apps/api/src/modules/documents/documents.controller.ts"
+  - "apps/api/src/modules/documents/documents.service.ts"
+  - "apps/api/src/modules/documents/documents.repository.ts"
+  - "apps/api/src/modules/documents/documents.routes.ts"
+  - "apps/api/src/modules/documents/index.ts"
+actions:
+  - "Port templates repository to apps/api/src/modules/documents/documents.repository.ts using SqliteCollectionRepository('templates')."
+  - "Port terms & conditions presets and thermal print template configs to documents.service.ts."
+  - "Expose GET /api/templates, POST /api/templates, and DELETE /api/templates in documents.routes.ts."
+  - "Maintain backward-compatibility re-exports in server/modules/templates/."
+preserve:
+  - "Preserve default GST declaration clauses and authorized signature metadata."
+acceptance:
+  - "GET /api/templates returns 200 with templates list."
+  - "Smoke test subtest 11 passes cleanly."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore original files in server/modules/templates/."
+risks:
+  - "Template ID slug collisions or missing default terms fallback."
+context_refs:
+  - "server/modules/templates/templates.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

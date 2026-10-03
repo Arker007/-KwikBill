@@ -1,0 +1,47 @@
+id: "W04-P05"
+title: "Invoicing frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P03"
+  - "W04-P04"
+objective: "Migrate invoice creation, editor, bills register, and metric cards into apps/web/src/domains/invoicing."
+scope: "Frontend invoicing domain components, line items table, discount controls, and dashboard metrics."
+files_read:
+  - "src/pages/InvoiceEditorPage.tsx"
+  - "src/pages/DashboardPage.tsx"
+  - "src/features/invoices/components/InvoiceEditor/InvoiceEditor.tsx"
+  - "src/features/invoices/components/InvoiceEditor/LineItemsTable.tsx"
+  - "src/features/invoices/components/BillsRegister/BillsRegisterTable.tsx"
+  - "src/features/invoices/hooks/useInvoiceForm.ts"
+  - "src/features/invoices/hooks/useBills.ts"
+files_create:
+  - "apps/web/src/domains/invoicing/pages/InvoiceEditorPage.tsx"
+  - "apps/web/src/domains/invoicing/pages/InvoicesRegisterPage.tsx"
+  - "apps/web/src/domains/invoicing/components/InvoiceEditor/InvoiceEditor.tsx"
+  - "apps/web/src/domains/invoicing/components/InvoiceEditor/LineItemsTable.tsx"
+  - "apps/web/src/domains/invoicing/components/BillsRegister/BillsRegisterTable.tsx"
+  - "apps/web/src/domains/invoicing/hooks/useInvoiceForm.ts"
+  - "apps/web/src/domains/invoicing/hooks/useInvoices.ts"
+  - "apps/web/src/domains/invoicing/index.ts"
+actions:
+  - "Port InvoiceEditor, LineItemsTable, and BillsRegisterTable into apps/web/src/domains/invoicing/."
+  - "Port useInvoiceForm and useBills hooks, connecting them to @free-gst/api-client."
+  - "Retain src/features/invoices/ facade re-exports for existing pages."
+preserve:
+  - "Preserve zero-item pristine initialization of new invoices (ADR-068)."
+  - "Preserve real-time tax calculation, discount mode toggles, and multi-currency exchange display."
+acceptance:
+  - "Invoice editor renders, adds/removes line items, calculates tax, and saves bills."
+  - "All 70 tax tests and 9 discount modes tests remain green."
+verify:
+  - "node scripts/tax-test.mjs"
+  - "node scripts/discount-modes-test.mjs"
+  - "npm run build"
+rollback:
+  - "Revert facade re-exports and restore src/features/invoices/."
+risks:
+  - "Calculation desynchronization if line item state does not trigger tax recalculation."
+context_refs:
+  - "src/pages/InvoiceEditorPage.tsx"
+  - "src/features/invoices/hooks/useInvoiceForm.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

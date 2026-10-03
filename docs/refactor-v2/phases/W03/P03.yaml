@@ -1,0 +1,37 @@
+id: "W03-P03"
+title: "Customer Management backend module"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Migrate client management and ledger services into apps/api/src/modules/customers."
+scope: "Backend customers controller, service, repository, and routes with phone/GSTIN indexing."
+files_read:
+  - "server/modules/clients/clients.controller.js"
+  - "server/modules/clients/clients.service.js"
+  - "server/modules/clients/clients.repository.js"
+  - "server/modules/clients/clients.routes.js"
+files_create:
+  - "apps/api/src/modules/customers/customers.controller.ts"
+  - "apps/api/src/modules/customers/customers.service.ts"
+  - "apps/api/src/modules/customers/customers.repository.ts"
+  - "apps/api/src/modules/customers/customers.routes.ts"
+  - "apps/api/src/modules/customers/index.ts"
+actions:
+  - "Port clients repository to customers.repository.ts using SqliteCollectionRepository('clients')."
+  - "Port customer ledger calculations, balance tracking, and search indexing to customers.service.ts."
+  - "Expose GET /api/clients, POST /api/clients, and DELETE /api/clients in customers.routes.ts."
+  - "Re-export customer modules from server/modules/clients/ to ensure zero legacy breakages."
+preserve:
+  - "Preserve opening balance calculations and auto-registration of walk-in clients."
+acceptance:
+  - "GET /api/clients returns 200 with an array of customer records."
+  - "Client create/update/delete operations execute with zero regressions."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore server/modules/clients/ original code and unmount customer routes in apps/api."
+risks:
+  - "Discrepancy in customer ID sanitization or custom ID formatting."
+context_refs:
+  - "server/modules/clients/clients.routes.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

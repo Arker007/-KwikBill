@@ -1,0 +1,43 @@
+id: "W04-P07"
+title: "Purchasing & Expenses frontend domains"
+status: "completed"
+depends_on:
+  - "W04-P01"
+  - "W02-P03"
+objective: "Migrate purchase bills and expense tracking into apps/web/src/domains/purchasing and expenses."
+scope: "Frontend purchasing and expenses domain components, vendor modals, and expense category pickers."
+files_read:
+  - "src/pages/PurchasesPage.tsx"
+  - "src/pages/ExpensesPage.tsx"
+  - "src/features/purchases/components/PurchaseModal.tsx"
+  - "src/features/expenses/components/ExpenseModal.tsx"
+files_create:
+  - "apps/web/src/domains/purchasing/pages/PurchasesPage.tsx"
+  - "apps/web/src/domains/purchasing/components/PurchaseBillModal.tsx"
+  - "apps/web/src/domains/purchasing/components/PurchasesTable.tsx"
+  - "apps/web/src/domains/purchasing/hooks/usePurchases.ts"
+  - "apps/web/src/domains/purchasing/index.ts"
+  - "apps/web/src/domains/expenses/pages/ExpensesPage.tsx"
+  - "apps/web/src/domains/expenses/components/ExpenseModal.tsx"
+  - "apps/web/src/domains/expenses/components/ExpensesTable.tsx"
+  - "apps/web/src/domains/expenses/hooks/useExpenses.ts"
+  - "apps/web/src/domains/expenses/index.ts"
+actions:
+  - "Port purchases and expenses pages and modals into apps/web/src/domains/purchasing/ and domains/expenses/."
+  - "Wire domain hooks to @free-gst/api-client."
+  - "Maintain backward-compatibility facades in src/features/purchases/ and src/features/expenses/."
+preserve:
+  - "Preserve ITC classification radio selectors and vendor GSTIN lookup."
+acceptance:
+  - "Purchases and expenses tables render, create, and filter records properly."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/purchases/ and expenses/ original files."
+risks:
+  - "Date picker format mismatches when submitting purchase invoices."
+context_refs:
+  - "src/pages/PurchasesPage.tsx"
+  - "src/pages/ExpensesPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

@@ -1,0 +1,15 @@
+node_modules/
+build/
+dist/
+coverage/
+data/
+Saved Invoices/
+Trash/
+tmp/
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+*.log
+.env*
+!.env.example

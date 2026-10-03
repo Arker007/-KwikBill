@@ -1,0 +1,35 @@
+id: "W06-P04"
+title: "SQLite source-of-truth cutover & fallback switch verification"
+status: "completed"
+depends_on:
+  - "W06-P03"
+objective: "Verify 100% data parity between JSON and SQLite, cut over primary read/write routing to accounting.db, and verify instant rollback switch."
+scope: "Execution of parity suite, synchronizing bill line items, and validating USE_SQLITE toggle."
+files_read:
+  - "scripts/verify-migration-parity.mjs"
+  - "scripts/migrate-json-to-sql.mjs"
+  - "apps/api/src/config/env.ts"
+files_change:
+  - "apps/api/src/config/env.ts"
+actions:
+  - "Execute node scripts/migrate-json-to-sql.mjs to ensure any newly added test bills and line items are 100% synchronized."
+  - "Run node scripts/verify-migration-parity.mjs and verify 20/20 parity checks pass."
+  - "Set USE_SQLITE=true as default primary storage engine in env.ts."
+  - "Verify that toggling USE_SQLITE=false instantly routes all reads/writes back to JSON without server restart or data loss."
+preserve:
+  - "Preserve dual-write shadow mode during cutover to guarantee zero-risk recovery."
+acceptance:
+  - "verify-migration-parity.mjs passes 20/20 checks with 0 failures."
+  - "All smoke tests pass with USE_SQLITE=true and USE_SQLITE=false."
+verify:
+  - "node scripts/verify-migration-parity.mjs"
+  - "node scripts/test-sqlite-repository.mjs"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Set USE_SQLITE=false in env.ts to revert primary engine to JSON."
+risks:
+  - "Line item count discrepancy between JSON and relational bill_items table."
+context_refs:
+  - "scripts/verify-migration-parity.mjs"
+  - "docs/LOCAL_SQL_MIGRATION_PLAN.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

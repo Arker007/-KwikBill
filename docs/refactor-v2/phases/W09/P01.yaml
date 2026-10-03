@@ -1,0 +1,33 @@
+id: "W09-P01"
+title: "Legacy facade entry points decommissioning"
+status: "completed"
+depends_on:
+  - "W08-P03"
+objective: "Clean up intermediate re-export facades in server.js and src/ once all internal imports directly resolve to monorepo paths."
+scope: "Retiring legacy facade files that are no longer referenced by build or tests."
+files_read:
+  - "server.js"
+  - "src/App.jsx"
+  - "src/store.js"
+files_change:
+  - "package.json"
+actions:
+  - "Update package.json scripts so 'dev' directly executes apps/api and apps/web ('tsx apps/api/src/bootstrap/server.ts')."
+  - "Update package.json 'build' script to execute monorepo build for apps/web and packages/."
+  - "Verify that no production files import legacy server/ or src/ facades."
+  - "Leave minimal root entry files as thin delegating stubs for backward-compatible dev commands."
+preserve:
+  - "Preserve dev server binding to 0.0.0.0:3000."
+acceptance:
+  - "Application boots and builds directly from monorepo entry points."
+  - "All smoke tests pass."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert package.json script definitions."
+risks:
+  - "Dangling import references in legacy scripts or test files."
+context_refs:
+  - "package.json"
+  - "docs/refactor-v2/ARCHITECTURE.md"

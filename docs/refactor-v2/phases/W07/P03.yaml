@@ -1,0 +1,38 @@
+id: "W07-P03"
+title: "Supabase cloud sync infrastructure (apps/api/src/infrastructure/cloud-sync)"
+status: "completed"
+depends_on:
+  - "W03-P01"
+objective: "Relocate Supabase cloud sync engine, transformers, conflict resolution, and audit logs into apps/api/src/infrastructure/cloud-sync."
+scope: "Backend cloud synchronization service, schema transformers across all 8 collections, and offline queue."
+files_read:
+  - "server/modules/supabase/supabase.controller.js"
+  - "server/modules/supabase/supabase.service.js"
+  - "server/modules/supabase/supabase.transformers.js"
+  - "server/modules/supabase/supabase.routes.js"
+files_create:
+  - "apps/api/src/infrastructure/cloud-sync/supabase/supabase.controller.ts"
+  - "apps/api/src/infrastructure/cloud-sync/supabase/supabase.service.ts"
+  - "apps/api/src/infrastructure/cloud-sync/supabase/supabase.transformers.ts"
+  - "apps/api/src/infrastructure/cloud-sync/supabase/supabase.routes.ts"
+  - "apps/api/src/infrastructure/cloud-sync/index.ts"
+actions:
+  - "Port supabase controller, service, and bidirectional transformers into apps/api/src/infrastructure/cloud-sync/supabase/."
+  - "Preserve pre-sync snapshot generation before executing batch upserts."
+  - "Expose GET/POST /api/supabase/config, POST /api/supabase/test, and POST /api/supabase/sync."
+  - "Maintain re-exports in server/modules/supabase/."
+preserve:
+  - "Preserve offline fallback (app functions 100% when disconnected or unconfigured)."
+  - "Preserve conflict resolution rules and audit logging."
+acceptance:
+  - "Smoke tests 17 through 23 pass with 0 errors."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore original files in server/modules/supabase/."
+risks:
+  - "Network timeouts or unhandled schema mismatches during cloud synchronization."
+context_refs:
+  - "server/modules/supabase/supabase.routes.js"
+  - "docs/SUPABASE_INTEGRATION_PLAN.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

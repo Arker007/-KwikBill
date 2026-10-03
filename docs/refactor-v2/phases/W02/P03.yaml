@@ -1,0 +1,39 @@
+id: "W02-P03"
+title: "Centralized API Client package (packages/api-client)"
+status: "completed"
+depends_on:
+  - "W02-P01"
+objective: "Extract typed HTTP client, error handling, and endpoint routing dictionary into packages/api-client."
+scope: "Creation of packages/api-client wrapping fetch with timeout, cancellation, and strong contract typing."
+files_read:
+  - "src/services/api/client.ts"
+  - "src/services/api/endpoints.ts"
+  - "src/store.js"
+files_create:
+  - "packages/api-client/package.json"
+  - "packages/api-client/tsconfig.json"
+  - "packages/api-client/src/index.ts"
+  - "packages/api-client/src/client.ts"
+  - "packages/api-client/src/endpoints.ts"
+  - "packages/api-client/src/errors.ts"
+actions:
+  - "Create packages/api-client/package.json with name '@free-gst/api-client'."
+  - "Port src/services/api/client.ts and endpoints.ts into packages/api-client/src/."
+  - "Implement structured ApiError class capturing HTTP status code and server error payloads."
+  - "Export ApiClient singleton and endpoint generators from packages/api-client/src/index.ts."
+  - "Re-export from src/services/api/client.ts and endpoints.ts to maintain backward compatibility."
+preserve:
+  - "Preserve error.status and error.body properties for duplicate invoice handling."
+acceptance:
+  - "packages/api-client builds without errors."
+  - "Smoke test endpoint calls succeed."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Revert src/services/api/ facades and delete packages/api-client/."
+risks:
+  - "Missing JSON headers or broken relative /api path prefixes."
+context_refs:
+  - "src/services/api/client.ts"
+  - "docs/refactor-v2/ARCHITECTURE.md"

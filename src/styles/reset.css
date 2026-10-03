@@ -1,0 +1,157 @@
+/**
+ * Reset & Base Typography — Free GST Billing Software
+ * Modern CSS reset, baseline typography, accessibility outlines, and global scrollbars.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Global Focus States: Crisp Black Border, No Blue Focus Ring */
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #000000 !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] input:focus-visible,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] select:focus-visible,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #ffffff !important;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 1.5px solid #000000 !important;
+  outline-offset: 1px !important;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] a:focus-visible {
+  outline: 1.5px solid #ffffff !important;
+  outline-offset: 1px !important;
+  border-radius: 4px;
+}
+
+/* Global Slim Custom Scrollbars (Firefox & WebKit/Blink) */
+*,
+*::before,
+*::after {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(156, 163, 175, 0.45) transparent !important;
+}
+
+[data-theme="dark"] *,
+[data-theme="dark"] *::before,
+[data-theme="dark"] *::after {
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent !important;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.45) !important;
+  border-radius: 9999px !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box !important;
+  transition: background-color 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.75) !important;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3) !important;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(209, 213, 219, 0.65) !important;
+}
+
+/* Slim scrollbar utility helper class */
+.slim-scrollbar {
+  scrollbar-width: thin;
+}
+
+.slim-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Global Keyframe Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes toast-slide {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

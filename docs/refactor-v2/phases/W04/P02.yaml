@@ -1,0 +1,44 @@
+id: "W04-P02"
+title: "Identity & Organization frontend domains"
+status: "completed"
+depends_on:
+  - "W04-P01"
+  - "W02-P03"
+objective: "Decompose SettingsPage and profile views into apps/web/src/domains/identity and organization."
+scope: "Frontend domain modules for Business Profiles, Company Details, User Roles, and Address Management."
+files_read:
+  - "src/pages/SettingsPage.tsx"
+  - "src/features/settings/components/BusinessProfilesTab.tsx"
+  - "src/features/settings/components/CompanyDetailsView.tsx"
+  - "src/features/settings/components/UserProfileView.tsx"
+  - "src/features/settings/components/UsersRolesView.tsx"
+files_create:
+  - "apps/web/src/domains/organization/components/BusinessProfilesView.tsx"
+  - "apps/web/src/domains/organization/components/CompanyDetailsView.tsx"
+  - "apps/web/src/domains/organization/components/AddressCard.tsx"
+  - "apps/web/src/domains/organization/hooks/useOrganization.ts"
+  - "apps/web/src/domains/organization/index.ts"
+  - "apps/web/src/domains/identity/components/UserProfileView.tsx"
+  - "apps/web/src/domains/identity/components/UsersRolesView.tsx"
+  - "apps/web/src/domains/identity/hooks/useIdentity.ts"
+  - "apps/web/src/domains/identity/index.ts"
+actions:
+  - "Migrate business profile management, bank account details, and address cards to domains/organization/."
+  - "Migrate user profiles and role management to domains/identity/."
+  - "Wire domain hooks to @free-gst/api-client."
+  - "Re-export components in src/features/settings/ to maintain backward compatibility."
+preserve:
+  - "Preserve multiple profile switching, primary profile designation, and logo upload preview."
+acceptance:
+  - "Business profile settings view renders and updates profile records."
+  - "Build succeeds with 0 type errors."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/settings/ original files."
+risks:
+  - "Context desynchronization when switching active business profile."
+context_refs:
+  - "src/pages/SettingsPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

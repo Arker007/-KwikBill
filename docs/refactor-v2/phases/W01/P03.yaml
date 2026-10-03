@@ -1,0 +1,34 @@
+id: "W01-P03"
+title: "App routing and proxy setup for web/api development server"
+status: "completed"
+depends_on:
+  - "W01-P02"
+objective: "Configure apps/web Vite configuration and Express 0.0.0.0:3000 reverse proxy bridge."
+scope: "Establishing dual-mode development and production server wiring for apps/web and apps/api."
+files_read:
+  - "vite.config.js"
+  - "server/app.js"
+files_create:
+  - "apps/web/vite.config.ts"
+files_change:
+  - "server/app.js"
+actions:
+  - "Create apps/web/vite.config.ts importing React and Tailwind plugins, configured with root pointing to apps/web."
+  - "Ensure server/app.js detects whether it runs in monorepo mode (resolving apps/web/dist or apps/web/src for Vite middlewares)."
+  - "Verify binding exclusively to host 0.0.0.0 and port 3000."
+preserve:
+  - "Preserve all existing API proxy paths (/api/*) and static asset routing."
+acceptance:
+  - "Dev server boots and serves HTML on port 3000."
+  - "Vite compiles cleanly in apps/web."
+verify:
+  - "node tests/smoke.mjs"
+  - "npm run build"
+rollback:
+  - "Revert server/app.js changes and remove apps/web/vite.config.ts."
+risks:
+  - "Static file path resolution mismatch between dev and production modes."
+context_refs:
+  - "server/app.js"
+  - "vite.config.js"
+  - "RULES.md"

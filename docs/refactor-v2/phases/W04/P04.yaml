@@ -1,0 +1,42 @@
+id: "W04-P04"
+title: "Catalog & Inventory frontend domains"
+status: "completed"
+depends_on:
+  - "W04-P01"
+  - "W02-P03"
+objective: "Migrate product master data and inventory stock tracking into apps/web/src/domains/catalog and inventory."
+scope: "Frontend catalog and inventory domain modules, category management, and low-stock indicators."
+files_read:
+  - "src/pages/InventoryPage.tsx"
+  - "src/features/inventory/components/ProductModal.tsx"
+  - "src/features/inventory/components/ProductsTable.tsx"
+  - "src/features/inventory/components/CategoryManagerModal.tsx"
+  - "src/features/inventory/hooks/useInventory.ts"
+files_create:
+  - "apps/web/src/domains/catalog/pages/CatalogPage.tsx"
+  - "apps/web/src/domains/catalog/components/ProductModal.tsx"
+  - "apps/web/src/domains/catalog/components/ProductsTable.tsx"
+  - "apps/web/src/domains/catalog/components/CategoryManagerModal.tsx"
+  - "apps/web/src/domains/catalog/hooks/useCatalog.ts"
+  - "apps/web/src/domains/catalog/index.ts"
+  - "apps/web/src/domains/inventory/components/StockAdjustmentModal.tsx"
+  - "apps/web/src/domains/inventory/hooks/useInventory.ts"
+  - "apps/web/src/domains/inventory/index.ts"
+actions:
+  - "Port inventory views and modals into apps/web/src/domains/catalog/ and domains/inventory/."
+  - "Wire useCatalog and useInventory hooks to API endpoints."
+  - "Maintain re-exports in src/features/inventory/ and src/pages/InventoryPage.tsx."
+preserve:
+  - "Preserve HSN/SAC search suggestions, stock threshold badges, and price calculations."
+acceptance:
+  - "Catalog and inventory views render and correctly update product quantities."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/inventory/ original files."
+risks:
+  - "Loss of active product search filters during state transition."
+context_refs:
+  - "src/pages/InventoryPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"

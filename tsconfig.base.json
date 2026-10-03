@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@free-gst/document-renderer": [
+        "packages/document-renderer/src/index.ts"
+      ],
+      "@free-gst/document-renderer/*": [
+        "packages/document-renderer/src/*"
+      ],
+      "@free-gst/financial-core": [
+        "packages/financial-core/src/index.ts"
+      ],
+      "@free-gst/financial-core/*": [
+        "packages/financial-core/src/*"
+      ],
+      "@free-gst/api-contracts": [
+        "packages/api-contracts/src/index.ts"
+      ],
+      "@free-gst/api-contracts/*": [
+        "packages/api-contracts/src/*"
+      ],
+      "@free-gst/ui": [
+        "packages/ui/src/index.ts"
+      ],
+      "@free-gst/ui/*": [
+        "packages/ui/src/*"
+      ],
+      "@free-gst/api-client": [
+        "packages/api-client/src/index.ts"
+      ],
+      "@free-gst/api-client/*": [
+        "packages/api-client/src/*"
+      ],
+      "@free-gst/api": [
+        "apps/api/src/bootstrap/index.ts"
+      ],
+      "@free-gst/api/*": [
+        "apps/api/src/*"
+      ]
+    }
+  }
+}

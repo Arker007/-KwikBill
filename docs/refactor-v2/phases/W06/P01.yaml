@@ -1,0 +1,35 @@
+id: "W06-P01"
+title: "Database migration scripts and schema layout (database/)"
+status: "completed"
+depends_on:
+  - "W00-P01"
+objective: "Establish canonical SQLite DDL schemas, versioned migrations, and seeds in top-level database/ directory."
+scope: "Creation of database/schema, database/migrations, and database/seeds."
+files_read:
+  - "server/infrastructure/db/schema.sql"
+  - "server/infrastructure/db/sqlite.js"
+files_create:
+  - "database/schema/schema.sql"
+  - "database/migrations/001_initial_schema.sql"
+  - "database/migrations/002_raw_json_and_documents.sql"
+  - "database/seeds/default_profile.sql"
+actions:
+  - "Copy canonical schema.sql to database/schema/schema.sql."
+  - "Decompose migrations into versioned SQL scripts: 001_initial_schema.sql and 002_raw_json_and_documents.sql."
+  - "Create seed scripts for default business profiles and numbering settings in database/seeds/."
+  - "Ensure sqlite.js reads schema and migrations from database/ directory."
+preserve:
+  - "Preserve integer Paisa column conventions, foreign key constraints, and WAL mode pragmas."
+acceptance:
+  - "Database schema initializes cleanly in a temporary database file."
+  - "PRAGMA foreign_key_check returns 0 constraint violations."
+verify:
+  - "node scripts/init-sqlite-db.mjs"
+rollback:
+  - "Remove database/ directory and keep server/infrastructure/db/schema.sql."
+risks:
+  - "Migration version collision in schema_migrations table."
+context_refs:
+  - "server/infrastructure/db/schema.sql"
+  - "docs/LOCAL_SQL_MIGRATION_PLAN.md"
+  - "docs/refactor-v2/ARCHITECTURE.md"

@@ -1,0 +1,38 @@
+id: "W07-P02"
+title: "Backup and snapshot infrastructure (apps/api/src/infrastructure/backups)"
+status: "completed"
+depends_on:
+  - "W03-P01"
+  - "W06-P02"
+objective: "Relocate rolling backup engine and pre-sync snapshot generator into apps/api/src/infrastructure/backups."
+scope: "Backend backup manager, zip/manifest generation, snapshot rotators, and restore safety validations."
+files_read:
+  - "server/infrastructure/backup/backupEngine.js"
+  - "server/modules/backups/backups.controller.js"
+  - "server/modules/backups/backups.service.js"
+  - "server/modules/backups/backups.routes.js"
+files_create:
+  - "apps/api/src/infrastructure/backups/backupEngine.ts"
+  - "apps/api/src/infrastructure/backups/snapshotManager.ts"
+  - "apps/api/src/infrastructure/backups/backups.routes.ts"
+  - "apps/api/src/infrastructure/backups/index.ts"
+actions:
+  - "Port backupEngine.js and snapshot routines into apps/api/src/infrastructure/backups/."
+  - "Support backing up both data/sqlite/accounting.db (via safe SQLite VACUUM INTO or sqlite backup API) and data/ JSON files."
+  - "Expose GET /api/backups, POST /api/backups/create, and POST /api/backups/restore."
+  - "Maintain re-exports in server/infrastructure/backup/ and server/modules/backups/."
+preserve:
+  - "NEVER independently copy an active SQLite database file or its WAL files as a raw file copy (Rule A8)."
+  - "Use SQLite backup pragma / online backup command to guarantee point-in-time consistency."
+acceptance:
+  - "Creating a backup produces a valid archive and manifest."
+  - "Restoring a test snapshot verifies data integrity without corruption."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore original files in server/infrastructure/backup/ and server/modules/backups/."
+risks:
+  - "Database lock timeout if backup runs during high write activity."
+context_refs:
+  - "server/infrastructure/backup/backupEngine.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

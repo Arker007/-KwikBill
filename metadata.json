@@ -1,0 +1,6 @@
+{
+  "name": "kwikBill",
+  "description": "Fast GST invoice and billing software with GSTR-1/3B/2B reconciliation, multi-currency, and PDF invoice generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

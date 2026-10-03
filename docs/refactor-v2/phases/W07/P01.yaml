@@ -1,0 +1,32 @@
+id: "W07-P01"
+title: "Scheduler infrastructure relocation (apps/api/src/infrastructure/scheduler)"
+status: "completed"
+depends_on:
+  - "W03-P06"
+objective: "Relocate recurring billing cron scheduler and soft-delete trash cleanup into apps/api/src/infrastructure/scheduler."
+scope: "Backend periodic job runners, cron loop timers, and recurring bill generation scheduler."
+files_read:
+  - "server/infrastructure/cron/recurringEngine.js"
+  - "server/infrastructure/cron/trashEngine.js"
+files_create:
+  - "apps/api/src/infrastructure/scheduler/recurringEngine.ts"
+  - "apps/api/src/infrastructure/scheduler/trashEngine.ts"
+  - "apps/api/src/infrastructure/scheduler/index.ts"
+actions:
+  - "Port recurringEngine.js into apps/api/src/infrastructure/scheduler/recurringEngine.ts."
+  - "Port trashEngine.js (auto-purging soft-deleted bills after 30 days) into apps/api/src/infrastructure/scheduler/trashEngine.ts."
+  - "Wire scheduler startup into apps/api/src/bootstrap/server.ts with clean shutdown handlers."
+  - "Maintain re-exports in server/infrastructure/cron/."
+preserve:
+  - "Preserve interval frequencies, error isolation (errors in cron do not crash HTTP listener), and 30-day trash retention policy."
+acceptance:
+  - "Schedulers initialize on server startup without throwing unhandled exceptions."
+verify:
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore server/infrastructure/cron/ original files."
+risks:
+  - "Double-execution of recurring bills if multiple timer loops are registered."
+context_refs:
+  - "server/infrastructure/cron/recurringEngine.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

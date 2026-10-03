@@ -1,0 +1,39 @@
+id: "W06-P02"
+title: "Backend persistence engine relocation to apps/api/src/infrastructure/persistence"
+status: "completed"
+depends_on:
+  - "W03-P01"
+  - "W06-P01"
+objective: "Relocate SqliteCollectionRepository, JsonCollectionRepository, and sqlite.js adapter into apps/api/src/infrastructure/persistence."
+scope: "Backend storage engine, repository interfaces, and connection singleton relocation."
+files_read:
+  - "server/infrastructure/db/sqlite.js"
+  - "server/infrastructure/storage/CollectionRepository.js"
+  - "server/infrastructure/storage/SqliteCollectionRepository.js"
+  - "server/infrastructure/storage/JsonCollectionRepository.js"
+  - "server/infrastructure/storage/SingleFileRepository.js"
+files_create:
+  - "apps/api/src/infrastructure/persistence/sqlite.ts"
+  - "apps/api/src/infrastructure/persistence/CollectionRepository.ts"
+  - "apps/api/src/infrastructure/persistence/SqliteCollectionRepository.ts"
+  - "apps/api/src/infrastructure/persistence/JsonCollectionRepository.ts"
+  - "apps/api/src/infrastructure/persistence/SingleFileRepository.ts"
+  - "apps/api/src/infrastructure/persistence/index.ts"
+actions:
+  - "Port sqlite connection manager and DatabaseSync wrapper to apps/api/src/infrastructure/persistence/sqlite.ts."
+  - "Port SqliteCollectionRepository, JsonCollectionRepository, and SingleFileRepository into persistence/."
+  - "Export all repository classes via apps/api/src/infrastructure/persistence/index.ts."
+  - "Update server/infrastructure/storage/ and db/ to re-export from apps/api persistence engine."
+preserve:
+  - "Preserve dual-write shadow mode and atomicFs emergency fallback."
+acceptance:
+  - "Repository adapter tests pass 12/12 assertions."
+verify:
+  - "node scripts/test-sqlite-repository.mjs"
+rollback:
+  - "Restore server/infrastructure/storage/ original files."
+risks:
+  - "Database file path miscalculation if DATA_DIR resolution changes."
+context_refs:
+  - "server/infrastructure/storage/SqliteCollectionRepository.js"
+  - "docs/refactor-v2/ARCHITECTURE.md"

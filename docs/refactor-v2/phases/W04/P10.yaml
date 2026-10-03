@@ -1,0 +1,38 @@
+id: "W04-P10"
+title: "Reporting frontend domain"
+status: "completed"
+depends_on:
+  - "W04-P05"
+  - "W04-P07"
+objective: "Migrate financial analytics, sales reports, and customer aging into apps/web/src/domains/reporting."
+scope: "Frontend reporting domain views, date filters, P&L tables, and CSV export utilities."
+files_read:
+  - "src/pages/ReportsPage.tsx"
+  - "src/features/reports/components/SalesReportTab.tsx"
+  - "src/features/reports/components/AgingReportTab.tsx"
+  - "src/features/reports/hooks/useReports.ts"
+files_create:
+  - "apps/web/src/domains/reporting/pages/ReportsPage.tsx"
+  - "apps/web/src/domains/reporting/components/SalesReportView.tsx"
+  - "apps/web/src/domains/reporting/components/AgingReportView.tsx"
+  - "apps/web/src/domains/reporting/components/ProfitLossView.tsx"
+  - "apps/web/src/domains/reporting/hooks/useReports.ts"
+  - "apps/web/src/domains/reporting/index.ts"
+actions:
+  - "Port ReportsPage and analytical tabs into apps/web/src/domains/reporting/."
+  - "Wire useReports hook to @free-gst/api-client reporting endpoints."
+  - "Maintain re-exports in src/features/reports/ and src/pages/ReportsPage.tsx."
+preserve:
+  - "Preserve CSV export generation and fiscal year date filter presets."
+acceptance:
+  - "Reports page renders, filters by date range, and exports CSV datasets cleanly."
+verify:
+  - "npm run build"
+  - "node tests/smoke.mjs"
+rollback:
+  - "Restore src/features/reports/ original files."
+risks:
+  - "Slow rendering when processing large transaction arrays in client-side memory."
+context_refs:
+  - "src/pages/ReportsPage.tsx"
+  - "docs/refactor-v2/ARCHITECTURE.md"
